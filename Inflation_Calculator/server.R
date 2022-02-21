@@ -19,7 +19,7 @@ shinyServer(function(input, output) {
       paste0("Note: 'Phoenix-Mesa-Scottsdale' refers to the Phoenix-Mesa-Chandler Metropolitan Statistical Area which includes Maricopa and Pinal Counties. See above map for more details.")
     })
     output$CA_txtOutput = renderText({
-      paste0("Note:'San Francisco-Oakland-Hayward' includes Alameda, Contra Costa, Marin, San Francisco and San Mateo Counties.<br><br/>
+      paste0("Note:'San Francisco-Oakland-Hayward' includes Alameda, Contra Costa, Marin, San Francisco and San Mateo Counties.
              'San Diego-Carlsbad'refers to the San Diego-Chula Vista-Carlsbad Metropolitan Statistical Area which is comprised of San Diego County. See above map for more details ")
     })
     })
