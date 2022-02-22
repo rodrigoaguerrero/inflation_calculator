@@ -23,6 +23,13 @@ shinyServer(function(input, output) {
              'San Diego-Carlsbad'refers to the San Diego-Chula Vista-Carlsbad Metropolitan Statistical Area which is comprised of San Diego County. See above map for more details ")
     })
     output$FL_txtOutput = renderText({
-      paste0("Note:")
+      paste0("Note: 'Miami-Fort Lauderdale-West Palm Peach' refers to the Miami-Port St. Lucie-Fort Lauderdale Metropolitan Statistical Area")
     })
+    output$GA_txtOutput = renderText({
+      paste0("Note: 'Atlanta-Sandy Springs-Roswell' refers to the Atlanta-Sandy Springs-Alpharetta Metropolitan Statistical Area")
+    })
+    output$HI_txtOuput = renderText({
+      paste0("Note: 'Urban Hawaii' refers to the Urban Honolulu Metropolitan Statistical Area")
+    })
+    
     })

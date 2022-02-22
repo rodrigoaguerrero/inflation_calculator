@@ -66,22 +66,25 @@ shinyUI(fluidPage(
                 selectInput("metro_area", "Select your metro area of residence, if applicable", 
                             c("None", "Tampa-St. Petersburg-Clearwater","Miami-Fort Lauderdale-West Palm Beach")
                 ),
-                a("Click here to view a map of Counties and Metro Areas in Florida",target="_blank",href="Florida.pdf")
+                a("Click here to view a map of Counties and Metro Areas in Florida",target="_blank",href="Florida.pdf"),
+                textOutput("FL_txtOutput")
             ),
             conditionalPanel(
                 condition = "input.state == 'Georgia'",
                 selectInput("metro_area", "Select your metro area of residence, if applicable", 
                             c("None", "Atlanta-Sandy Springs-Roswell")
                 ),
-                a("Click here to view a map of Counties and Metro Areas in Georgia",target="_blank",href="Georgia.pdf")
+                a("Click here to view a map of Counties and Metro Areas in Georgia",target="_blank",href="Georgia.pdf"),
+                textOutput("GA_txtOutput")
             ),
             ),
             conditionalPanel(
                 condition = "input.state == 'Hawaii'",
                 selectInput("metro_area", "Select your metro area of residence, if applicable", 
-                            c("None", "Urban Hawaii")
+                            c("None", "Urban Hawaii"),
                 ),
-                a("Click here to view a map of Counties and Metro Areas in Hawaii",target="_blank",href="Hawaii.pdf")
+                a("Click here to view a map of Counties and Metro Areas in Hawaii",target="_blank",href="Hawaii.pdf"),
+                textOutput("HI_txtOuput")
             ),
             conditionalPanel(
                 condition = "input.state == 'Illinois'",
