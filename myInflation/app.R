@@ -118,7 +118,6 @@ h[["Wisconsin"]] #MAKE SURE VALUES ARE HASHED TO KEY
 
 
 library(shiny)
-library(shiny)
 library(tidyverse)
 library(blscrapeR)
 library(ggplot2)
