@@ -390,7 +390,13 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                           br(),
                                           textOutput("usRate"),
                                           br(),
-                                          textOutput("weightRate")
+                                          textOutput("weightRate"),
+                                          br(),
+                                          br(),
+                                          radioButtons("plotType", "Purchasing Power Trend ($)",c("Inflation Trend")),
+                                          sliderInput("yearInput", "Select Year:",
+                                                      min = 2011, max = 2021, value = 2015, sep = "", animate = animationOptions(interval = 500, loop = TRUE)),
+                                          plotOutput("inflateplot")
                                           
                                  ),
                                  
@@ -461,7 +467,7 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
 
 server <- function(input, output, session){
   # test data
-  data <- data <- bls_api("LAUST040000000000004",startyear = 2010, endyear = 2020, Sys.getenv("BLS_KEY"))
+  data <- data <- bls_api("CUUR0000SA0R",startyear = 2011, endyear = 2021, Sys.getenv("BLS_KEY"))
   data <- data %>%
     mutate(
       periodName = factor(periodName, levels = month.name)
@@ -469,8 +475,8 @@ server <- function(input, output, session){
     arrange(periodName)
   
   # test output render
-  output$lauPlot <- renderPlot({
-    if (input$plotType == "lau") {
+  output$inflateplot <- renderPlot({
+    if (input$plotType == "Inflation Trend") {
       data_filtered <- data %>%
         filter(year == input$yearInput)
       ggplot(data_filtered, aes(periodName, value, group = 1)) +
