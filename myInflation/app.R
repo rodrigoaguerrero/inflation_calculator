@@ -133,188 +133,7 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                              sidebarPanel(
                                
                                #conditonal side panel for calculator page
-                               conditionalPanel(
-                                 condition = "input.tabSelected == 1",
-                                 selectInput("state", "Choose Your State/Territory of Residence", all_states),
-                                 br(),
-                                 
-                                 # conditionals for residence area if applicable
-                                 conditionalPanel(
-                                   condition = "input.state == 'Alaska'",
-                                   selectInput("metro_area", "Select your metro area of residence, if applicable", c("None", "Metro Alaska")
-                                   ),
-                                   a("Click here to view a map of counties and Metro Areas in Alaska",target="_blank",href="Alaska.pdf"),
-                                   textOutput("AK_txtOutput")
-                                 ),
-                                 conditionalPanel(
-                                   condition = "input.state == 'Arizona'",
-                                   selectInput("metro_area", "Select your metro area of residence, if applicable", c("None", "Phoenix-Mesa-Scottsdale")
-                                   ),
-                                   a("Click here to view a map of counties and Metro Areas in Arizona",target="_blank",href="Arizona.pdf"),
-                                   textOutput("AZ_txtOutput")
-                                 ),
-                                 conditionalPanel(
-                                   condition = "input.state == 'California'",
-                                   selectInput("metro_area", "Select your metro area of residence, if applicable", 
-                                               c("None", "Los Angeles-Long Beach-Anaheim","Riverside-San Bernardino-Ontario",
-                                                 "San Diego-Carlsbad", "San Francisco-Oakland-Hayward")
-                                   ),
-                                   a("Click here to view a map of counties and Metro Areas in California",target="_blank",href="California.pdf"),
-                                   textOutput("CA_txtOutput")
-                                 ),
-                                 conditionalPanel(
-                                   condition = "input.state == 'Colorado'",
-                                   selectInput("metro_area", "Select your metro area of residence, if applicable", 
-                                               c("None", "Denver-Aurora-Lakewood")
-                                   ),
-                                   a("Click here to view a map of counties and Metro Areas in Colorado",target="_blank",href="Colorado.pdf")
-                                   
-                                 ),
-                                 conditionalPanel(
-                                   condition = "input.state == 'Delaware'",
-                                   selectInput("metro_area", "Select your metro area of residence, if applicable", 
-                                               c("None", "Philadelphia-Camden-Wilmington")
-                                   ),
-                                   a("Click here to view a map of Counties and Metro Areas in Delaware",target="_blank",href="Delaware.pdf")
-                                 ),
-                                 conditionalPanel(
-                                   condition = "input.state == 'Florida'",
-                                   selectInput("metro_area", "Select your metro area of residence, if applicable", 
-                                               c("None", "Tampa-St. Petersburg-Clearwater","Miami-Fort Lauderdale-West Palm Beach")
-                                   ),
-                                   a("Click here to view a map of Counties and Metro Areas in Florida",target="_blank",href="Florida.pdf"),
-                                   textOutput("FL_txtOutput")
-                                 ),
-                                 conditionalPanel(
-                                   condition = "input.state == 'Georgia'",
-                                   selectInput("metro_area", "Select your metro area of residence, if applicable", 
-                                               c("None", "Atlanta-Sandy Springs-Roswell")
-                                   ),
-                                   a("Click here to view a map of Counties and Metro Areas in Georgia",target="_blank",href="Georgia.pdf"),
-                                   textOutput("GA_txtOutput")
-                                 )
-                               ),
-                               conditionalPanel(
-                                 condition = "input.state == 'Hawaii'",
-                                 selectInput("metro_area", "Select your metro area of residence, if applicable", 
-                                             c("None", "Urban Hawaii")
-                                 ),
-                                 a("Click here to view a map of Counties and Metro Areas in Hawaii",target="_blank",href="Hawaii.pdf"),
-                                 textOutput("HI_txtOuput")
-                               ),
-                               conditionalPanel(
-                                 condition = "input.state == 'Illinois'",
-                                 selectInput("metro_area", "Select your metro area of residence, if applicable", 
-                                             c("None", "Chicago-Naperville-Elgin", "St. Louis")
-                                 ),
-                                 a("Click here to view a map of Counties and Metro Areas in Illinois",target="_blank",href="Illinois.pdf")
-                               ),
-                               conditionalPanel(
-                                 condition = "input.state == 'Indiana'",
-                                 selectInput("metro_area", "Select your metro area of residence, if applicable", 
-                                             c("None", "Chicago-Naperville-Elgin")
-                                 ),
-                                 a("Click here to view a map of Counties and Metro Areas in Indiana",target="_blank",href="Indiana.pdf")
-                               ),
-                               conditionalPanel(
-                                 condition = "input.state == 'Maryland'",
-                                 selectInput("metro_area", "Select your metro area of residence, if applicable", 
-                                             c("None", "Baltimore-Columbia-Towson", "Philadelphia-Camden-Wilmington", 
-                                               "Washington-Arlington-Alexandria")
-                                 ),
-                                 a("Click here to view a map of Counties and Metro Areas in Maryland",target="_blank",href="Maryland.pdf")
-                               ),
-                               conditionalPanel(
-                                 condition = "input.state == 'Massachusetts'",
-                                 selectInput("metro_area", "Select your metro area of residence, if applicable", 
-                                             c("None", "Boston-Cambridge-Newton")
-                                 ),
-                                 a("Click here to view a map of Counties and Metro Areas in Massachusetts",target="_blank",href="Massachusetts.pdf")
-                               ),
-                               conditionalPanel(
-                                 condition = "input.state == 'Michigan'",
-                                 selectInput("metro_area", "Select your metro area of residence, if applicable", 
-                                             c("None", "Detroit-Warren-Dearborn")
-                                 ),
-                                 a("Click here to view a map of Counties and Metro Areas in Michigan",target="_blank",href="Michigan.pdf")
-                               ),
-                               conditionalPanel(
-                                 condition = "input.state == 'Minnesota'",
-                                 selectInput("metro_area", "Select your metro area of residence, if applicable", 
-                                             c("None", "Minneapolis-St.Paul-Bloomington")
-                                 ),
-                                 a("Click here to view a map of Counties and Metro Areas in Minnesota",target="_blank",href="Minnesota.pdf")
-                               ),
-                               conditionalPanel(
-                                 condition = "input.state == 'Missouri'",
-                                 selectInput("metro_area", "Select your metro area of residence, if applicable", 
-                                             c("None", "St. Louis")
-                                 ),
-                                 a("Click here to view a map of Counties and Metro Areas in Missouri",target="_blank",href="Missouri.pdf")
-                               ),
-                               conditionalPanel(
-                                 condition = "input.state == 'New Hampshire'",
-                                 selectInput("metro_area", "Select your metro area of residence, if applicable", 
-                                             c("None", "Boston-Cambridge-Newton")
-                                 ),
-                                 a("Click here to view a map of Counties and Metro Areas in New Hampshire",target="_blank",href="New_Hampshire.pdf")
-                               ),
-                               conditionalPanel(
-                                 condition = "input.state == 'New Jersey'",
-                                 selectInput("metro_area", "Select your metro area of residence, if applicable", 
-                                             c("None", "New York-Newark-Jersey City", "Philadelphia-Camden-Wilmington")
-                                 ),
-                                 a("Click here to view a map of Counties and Metro Areas in New Jersey",target="_blank",href="New_Jersey.pdf")
-                               ),
-                               conditionalPanel(
-                                 condition = "input.state == 'New York'",
-                                 selectInput("metro_area", "Select your metro area of residence, if applicable", 
-                                             c("None", "New York-Newark-Jersey City")
-                                 ),
-                                 a("Click here to view a map of Counties and Metro Areas in New York",target="_blank",href="New_York.pdf")
-                               ),
-                               conditionalPanel(
-                                 condition = "input.state == 'Pennsylvania'",
-                                 selectInput("metro_area", "Select your metro area of residence, if applicable", 
-                                             c("None", "New York-Newark-Jersey City", "Philadelphia-Camden-Wilmington")
-                                 ),
-                                 a("Click here to view a map of Counties and Metro Areas in Pennsylvania",target="_blank",href="Pennsylvania.pdf")
-                               ),
-                               conditionalPanel(
-                                 condition = "input.state == 'Texas'",
-                                 selectInput("metro_area", "Select your metro area of residence, if applicable", 
-                                             c("None", "Dallas-Fort Worth-Arlington", "Houston-The Woodlands-Sugar Land")
-                                 ),
-                                 a("Click here to view a map of Counties and Metro Areas in Texas",target="_blank",href="Texas.pdf")
-                               ),
-                               conditionalPanel(
-                                 condition = "input.state == 'Virginia'",
-                                 selectInput("metro_area", "Select your metro area of residence, if applicable", 
-                                             c("None", "Washington-Arlington-Alexandria")
-                                 ),
-                                 a("Click here to view a map of Counties and Metro Areas in Virginia",target="_blank",href="Virginia.pdf")
-                               ),
-                               conditionalPanel(
-                                 condition = "input.state == 'Washington'",
-                                 selectInput("metro_area", "Select your metro area of residence, if applicable", 
-                                             c("None", "Seattle-Tacoma-Bellevue")
-                                 ),
-                                 a("Click here to view a map of Counties and Metro Areas in Washington",target="_blank",href="Washington.pdf")
-                               ),
-                               conditionalPanel(
-                                 condition = "input.state == 'West Virginia'",
-                                 selectInput("metro_area", "Select your metro area of residence, if applicable", 
-                                             c("None", "Washington-Arlington-Alexandria")
-                                 ),
-                                 a("Click here to view a map of Counties and Metro Areas in West Virginia",target="_blank",href="West_Virginia.pdf")
-                               ),
-                               conditionalPanel(
-                                 condition = "input.state == 'Wisconsin'",
-                                 selectInput("metro_area", "Select your metro area of residence, if applicable", 
-                                             c("None", "Chicago-Naperville-Elgin", "Minneapolis-St.Paul-Bloomington")
-                                 ),
-                                 a("Click here to view a map of Counties and Metro Areas in Wisconsin",target="_blank",href="Wisconsin.pdf")
-                               ),
+                               
                                
                                # conditional side panel for dollar check page
                                conditionalPanel(
@@ -324,7 +143,58 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                  br(),
                                  tags$em("The tool uses the latest US government CPI data published on February 10, 2022 to adjust for inflation and calculate the cumulative inflation rate through January 2022. The U.S. Labor Department's Bureau of Labor Statistics will release the Consumer Price Index (CPI) with inflation data for February on March 10, 2022. (See a chart of recent inflation rates.)")
                                  
+                               ), 
+                               br(),
+
+                               # OTHER INPUTS:
+                               # Monthly Food expenses
+                               conditionalPanel(
+                                 condition = "input.tabSelected == 1",
+                                 sliderInput("foodInput", "Your Monthly Food Expenses: ",
+                                             min = 0, max = 5000, value = 1200, sep = "")
+                               ),
+                               # Housing Expenses
+                               conditionalPanel(
+                                 condition = "input.tabSelected == 1",
+                                 sliderInput("housingInput", "Your Monthly Housing Expenses: ",
+                                             min = 0, max = 10000, value = 8200, sep = "")
+                               ),
+                               # Transportation
+                               conditionalPanel(
+                                 condition = "input.tabSelected == 1",
+                                 sliderInput("transInput", "Your Monthly Transportation Expenses: ",
+                                             min = 0, max = 5000, value = 3200, sep = "")
+                               ),
+                               # Medical
+                               conditionalPanel(
+                                 condition = "input.tabSelected == 1",
+                                 sliderInput("medInput", "Your Monthly Medical Expenses: ",
+                                             min = 0, max = 10000, value = 480, sep = "")
+                               ),
+                               # Communication/Education
+                               conditionalPanel(
+                                 condition = "input.tabSelected == 1",
+                                 sliderInput("comInput", "Your Monthly Communication and Education Expenses: ",
+                                             min = 0, max = 10000, value = 2300, sep = "")
+                               ),
+                               # Clothing
+                               conditionalPanel(
+                                 condition = "input.tabSelected == 1",
+                                 sliderInput("clothInput", "Your Monthly Apparel Expense: ",
+                                             min = 0, max = 5000, value = 4000, sep = "")
+                               ),
+                               # Recreation
+                               conditionalPanel(
+                                 condition = "input.tabSelected == 1",
+                                 sliderInput("recInput", "Your Monthly Recreational Expenses: ",
+                                             min = 0, max = 3000, value = 250, sep = "")
+                               ),
+                               conditionalPanel(
+                                 condition = "input.tabSelected == 1",
+                                 sliderInput("otherInput", "Your Other Monthly Expenses: ",
+                                             min = 0 , max = 5000, value = 4200, sep = "")
                                )
+                               
                              ),
                              
                              # main panel for home page/tool page
@@ -332,16 +202,204 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                tabsetPanel(
                                  # tab for main calculator page
                                  tabPanel("Personal Inflation Calculator", value = 1,
-                                          # test conditional statement for displaying plot
                                           conditionalPanel(
-                                            condition = "input.state == 'Arizona' && input.plotType == 'lau'",
-                                            plotOutput("lauPlot")
-                                          )
+                                            condition = "input.tabSelected == 1",
+                                            selectInput("state", "Choose Your State/Territory of Residence", all_states),
+                                            br(),
+                                            
+                                            # conditionals for residence area if applicable
+                                            conditionalPanel(
+                                              condition = "input.state == 'Alaska'",
+                                              selectInput("metro_area", "Select your metro area of residence, if applicable", c("None", "Metro Alaska")
+                                              ),
+                                              a("Click here to view a map of counties and Metro Areas in Alaska",target="_blank",href="Alaska.pdf"),
+                                              textOutput("AK_txtOutput")
+                                            ),
+                                            conditionalPanel(
+                                              condition = "input.state == 'Arizona'",
+                                              selectInput("metro_area", "Select your metro area of residence, if applicable", c("None", "Phoenix-Mesa-Scottsdale")
+                                              ),
+                                              a("Click here to view a map of counties and Metro Areas in Arizona",target="_blank",href="Arizona.pdf"),
+                                              textOutput("AZ_txtOutput")
+                                            ),
+                                            conditionalPanel(
+                                              condition = "input.state == 'California'",
+                                              selectInput("metro_area", "Select your metro area of residence, if applicable", 
+                                                          c("None", "Los Angeles-Long Beach-Anaheim","Riverside-San Bernardino-Ontario",
+                                                            "San Diego-Carlsbad", "San Francisco-Oakland-Hayward")
+                                              ),
+                                              a("Click here to view a map of counties and Metro Areas in California",target="_blank",href="California.pdf"),
+                                              textOutput("CA_txtOutput")
+                                            ),
+                                            conditionalPanel(
+                                              condition = "input.state == 'Colorado'",
+                                              selectInput("metro_area", "Select your metro area of residence, if applicable", 
+                                                          c("None", "Denver-Aurora-Lakewood")
+                                              ),
+                                              a("Click here to view a map of counties and Metro Areas in Colorado",target="_blank",href="Colorado.pdf")
+                                              
+                                            ),
+                                            conditionalPanel(
+                                              condition = "input.state == 'Delaware'",
+                                              selectInput("metro_area", "Select your metro area of residence, if applicable", 
+                                                          c("None", "Philadelphia-Camden-Wilmington")
+                                              ),
+                                              a("Click here to view a map of Counties and Metro Areas in Delaware",target="_blank",href="Delaware.pdf")
+                                            ),
+                                            conditionalPanel(
+                                              condition = "input.state == 'Florida'",
+                                              selectInput("metro_area", "Select your metro area of residence, if applicable", 
+                                                          c("None", "Tampa-St. Petersburg-Clearwater","Miami-Fort Lauderdale-West Palm Beach")
+                                              ),
+                                              a("Click here to view a map of Counties and Metro Areas in Florida",target="_blank",href="Florida.pdf"),
+                                              textOutput("FL_txtOutput")
+                                            ),
+                                            conditionalPanel(
+                                              condition = "input.state == 'Georgia'",
+                                              selectInput("metro_area", "Select your metro area of residence, if applicable", 
+                                                          c("None", "Atlanta-Sandy Springs-Roswell")
+                                              ),
+                                              a("Click here to view a map of Counties and Metro Areas in Georgia",target="_blank",href="Georgia.pdf"),
+                                              textOutput("GA_txtOutput")
+                                            )
+                                          ),
+                                          conditionalPanel(
+                                            condition = "input.state == 'Hawaii'",
+                                            selectInput("metro_area", "Select your metro area of residence, if applicable", 
+                                                        c("None", "Urban Hawaii")
+                                            ),
+                                            a("Click here to view a map of Counties and Metro Areas in Hawaii",target="_blank",href="Hawaii.pdf"),
+                                            textOutput("HI_txtOuput")
+                                          ),
+                                          conditionalPanel(
+                                            condition = "input.state == 'Illinois'",
+                                            selectInput("metro_area", "Select your metro area of residence, if applicable", 
+                                                        c("None", "Chicago-Naperville-Elgin", "St. Louis")
+                                            ),
+                                            a("Click here to view a map of Counties and Metro Areas in Illinois",target="_blank",href="Illinois.pdf")
+                                          ),
+                                          conditionalPanel(
+                                            condition = "input.state == 'Indiana'",
+                                            selectInput("metro_area", "Select your metro area of residence, if applicable", 
+                                                        c("None", "Chicago-Naperville-Elgin")
+                                            ),
+                                            a("Click here to view a map of Counties and Metro Areas in Indiana",target="_blank",href="Indiana.pdf")
+                                          ),
+                                          conditionalPanel(
+                                            condition = "input.state == 'Maryland'",
+                                            selectInput("metro_area", "Select your metro area of residence, if applicable", 
+                                                        c("None", "Baltimore-Columbia-Towson", "Philadelphia-Camden-Wilmington", 
+                                                          "Washington-Arlington-Alexandria")
+                                            ),
+                                            a("Click here to view a map of Counties and Metro Areas in Maryland",target="_blank",href="Maryland.pdf")
+                                          ),
+                                          conditionalPanel(
+                                            condition = "input.state == 'Massachusetts'",
+                                            selectInput("metro_area", "Select your metro area of residence, if applicable", 
+                                                        c("None", "Boston-Cambridge-Newton")
+                                            ),
+                                            a("Click here to view a map of Counties and Metro Areas in Massachusetts",target="_blank",href="Massachusetts.pdf")
+                                          ),
+                                          conditionalPanel(
+                                            condition = "input.state == 'Michigan'",
+                                            selectInput("metro_area", "Select your metro area of residence, if applicable", 
+                                                        c("None", "Detroit-Warren-Dearborn")
+                                            ),
+                                            a("Click here to view a map of Counties and Metro Areas in Michigan",target="_blank",href="Michigan.pdf")
+                                          ),
+                                          conditionalPanel(
+                                            condition = "input.state == 'Minnesota'",
+                                            selectInput("metro_area", "Select your metro area of residence, if applicable", 
+                                                        c("None", "Minneapolis-St.Paul-Bloomington")
+                                            ),
+                                            a("Click here to view a map of Counties and Metro Areas in Minnesota",target="_blank",href="Minnesota.pdf")
+                                          ),
+                                          conditionalPanel(
+                                            condition = "input.state == 'Missouri'",
+                                            selectInput("metro_area", "Select your metro area of residence, if applicable", 
+                                                        c("None", "St. Louis")
+                                            ),
+                                            a("Click here to view a map of Counties and Metro Areas in Missouri",target="_blank",href="Missouri.pdf")
+                                          ),
+                                          conditionalPanel(
+                                            condition = "input.state == 'New Hampshire'",
+                                            selectInput("metro_area", "Select your metro area of residence, if applicable", 
+                                                        c("None", "Boston-Cambridge-Newton")
+                                            ),
+                                            a("Click here to view a map of Counties and Metro Areas in New Hampshire",target="_blank",href="New_Hampshire.pdf")
+                                          ),
+                                          conditionalPanel(
+                                            condition = "input.state == 'New Jersey'",
+                                            selectInput("metro_area", "Select your metro area of residence, if applicable", 
+                                                        c("None", "New York-Newark-Jersey City", "Philadelphia-Camden-Wilmington")
+                                            ),
+                                            a("Click here to view a map of Counties and Metro Areas in New Jersey",target="_blank",href="New_Jersey.pdf")
+                                          ),
+                                          conditionalPanel(
+                                            condition = "input.state == 'New York'",
+                                            selectInput("metro_area", "Select your metro area of residence, if applicable", 
+                                                        c("None", "New York-Newark-Jersey City")
+                                            ),
+                                            a("Click here to view a map of Counties and Metro Areas in New York",target="_blank",href="New_York.pdf")
+                                          ),
+                                          conditionalPanel(
+                                            condition = "input.state == 'Pennsylvania'",
+                                            selectInput("metro_area", "Select your metro area of residence, if applicable", 
+                                                        c("None", "New York-Newark-Jersey City", "Philadelphia-Camden-Wilmington")
+                                            ),
+                                            a("Click here to view a map of Counties and Metro Areas in Pennsylvania",target="_blank",href="Pennsylvania.pdf")
+                                          ),
+                                          conditionalPanel(
+                                            condition = "input.state == 'Texas'",
+                                            selectInput("metro_area", "Select your metro area of residence, if applicable", 
+                                                        c("None", "Dallas-Fort Worth-Arlington", "Houston-The Woodlands-Sugar Land")
+                                            ),
+                                            a("Click here to view a map of Counties and Metro Areas in Texas",target="_blank",href="Texas.pdf")
+                                          ),
+                                          conditionalPanel(
+                                            condition = "input.state == 'Virginia'",
+                                            selectInput("metro_area", "Select your metro area of residence, if applicable", 
+                                                        c("None", "Washington-Arlington-Alexandria")
+                                            ),
+                                            a("Click here to view a map of Counties and Metro Areas in Virginia",target="_blank",href="Virginia.pdf")
+                                          ),
+                                          conditionalPanel(
+                                            condition = "input.state == 'Washington'",
+                                            selectInput("metro_area", "Select your metro area of residence, if applicable", 
+                                                        c("None", "Seattle-Tacoma-Bellevue")
+                                            ),
+                                            a("Click here to view a map of Counties and Metro Areas in Washington",target="_blank",href="Washington.pdf")
+                                          ),
+                                          conditionalPanel(
+                                            condition = "input.state == 'West Virginia'",
+                                            selectInput("metro_area", "Select your metro area of residence, if applicable", 
+                                                        c("None", "Washington-Arlington-Alexandria")
+                                            ),
+                                            a("Click here to view a map of Counties and Metro Areas in West Virginia",target="_blank",href="West_Virginia.pdf")
+                                          ),
+                                          conditionalPanel(
+                                            condition = "input.state == 'Wisconsin'",
+                                            selectInput("metro_area", "Select your metro area of residence, if applicable", 
+                                                        c("None", "Chicago-Naperville-Elgin", "Minneapolis-St.Paul-Bloomington")
+                                            ),
+                                            a("Click here to view a map of Counties and Metro Areas in Wisconsin",target="_blank",href="Wisconsin.pdf")
+                                          ),
+                                          br(),
+                                          br(),
+                                          textOutput("personalRate"),
+                                          br(),
+                                          textOutput("usRate"),
+                                          br(),
+                                          textOutput("weightRate")
+                                          
                                  ),
                                  
                                  # tab for dollar checker page
                                  tabPanel("Dollar Comparison", value = 2,
-                                          helpText("Embedded Calculator tool goes here")),
+                                          helpText("Embedded Calculator tool goes here"),
+                                          br(),
+                                          helpText("*****WORK IN PROGRESS*****")
+                                          ),
                                  
                                  id = "tabSelected"
                                )
@@ -350,7 +408,31 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                            )
                          ),
                          # glossary page
-                         tabPanel("Glossary", helpText("Glossary, more detailed definitions go here")),
+                         tabPanel("Glossary",
+                                  # defintions
+                                  tags$h1("Definitions"),
+                                  tags$b("Inflation: "),
+                                  tags$h5("Inflation is a decrease in the buying power of money which is caused by the rise in prices of goods and services over a period of time, most commonly a one year period."),
+                                  br(),
+                                  tags$b("Market Basket: "),
+                                  tags$h5("Because there are innumerable goods and services and not all goods and services are frequently bought by the members of the population and as such would not be instructive in creating a general inflation rate, certain goods and services must be chosen to be a part of the aggregation which creates the general inflation rate."),
+                                  tags$h5("The Bureau of Labor Statistics does this by creating a market basket which creates a consumer price index. The market basket is created by taking a monthly survey which is distributed to consumers and from that survey data, a sample of goods and services is generated which can then be used to create a general inflation rate."),
+                                  br(),
+                                  tags$b("CPI (Consumer Price Index): "),
+                                  tags$h5("--defintion--"),
+                                  br(),
+                                  tags$b("CPI-U (Consumer Price Index for All Urban Consumers): "),
+                                  tags$h5("--definition--"),
+                                  br(),
+                                  # math formulas
+                                  tags$h1("Calculation Formulas"),
+                                  tags$b("Calculating CPI (Consumer Price Index): "),
+                                  tags$h5("The Bureau of Labor Statistics does this by creating a market basket which creates a consumer price index. The market basket is created by taking a monthly survey which is distributed to consumers and from that survey data, a sample of goods and services is generated which can then be used to create a market basket which is representative of general populations."),
+                                  tags$h5("CPI = ( Cost of Market Basket in Current Period / Cost of Market Basket in Base Period ) * 100", style="color:red"),
+                                  br(),
+                                  tags$b("Calculating Inflation: "),
+                                  tags$h5("( ( Starting Cost - Ending Cost ) / Starting Cost ) x 100", style="color:red")
+                         ),
                          
                          # other pages/ help and about page
                          navbarMenu("More",
@@ -370,13 +452,11 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                              tags$em("'ROLE' - Travis Myers")
                                     )
                          )
-                             
-                           
-                           
-                )
-                
-                
-                #NEED SOME SORT OF CONDITIONAL PANEL HERE
+   
+                ),
+                hr(),
+                print("Privacy Disclaimer HERE!")
+
 )
 
 server <- function(input, output, session){
@@ -398,6 +478,22 @@ server <- function(input, output, session){
         geom_point() +
         theme_classic()
     }
+  })
+  
+  # text outputs
+  # personal rate
+  output$personalRate <- renderText({
+    paste("Your Personal Inflation Rate: ", input$housingInput)
+  })
+  
+  # US national average
+  output$usRate <- renderText({
+    paste("U.S. Average Inflation Rate: ", input$clothInput)
+  })
+  
+  # Weighted Individual Inflation Rate
+  output$weightRate <- renderText({
+    paste("Your Weighted Individual Inflation Rate: ", input$recInput)
   })
 }
 
