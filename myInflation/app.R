@@ -124,7 +124,7 @@ library(blscrapeR)
 library(ggplot2)
 library(shinythemes)
 
-ui <- fluidPage(theme = shinytheme("slate"),
+ui <- fluidPage(theme = shinytheme("cosmo"),
                 # testing nav bar
                 navbarPage("MyInflation",
                          tabPanel("Home", verbatimTextOutput("Home"),
@@ -332,7 +332,7 @@ ui <- fluidPage(theme = shinytheme("slate"),
                              mainPanel(
                                tabsetPanel(
                                  # tab for main calculator page
-                                 tabPanel("Calculator", value = 1,
+                                 tabPanel("Personal Inflation Calculator", value = 1,
                                           # test conditional statement for displaying plot
                                           conditionalPanel(
                                             condition = "input.state == 'Arizona' && input.plotType == 'lau'",
@@ -341,7 +341,7 @@ ui <- fluidPage(theme = shinytheme("slate"),
                                  ),
                                  
                                  # tab for dollar checker page
-                                 tabPanel("Dollar Check", value = 2,
+                                 tabPanel("Dollar Comparison", value = 2,
                                           helpText("Embedded Calculator tool goes here")),
                                  
                                  id = "tabSelected"
@@ -359,17 +359,16 @@ ui <- fluidPage(theme = shinytheme("slate"),
                                     tabPanel("About", 
                                              helpText("Through the personal inflation rate, a person will be able to first, create a market basket, taking the inputs of the user to then create an inflation rate using the personalized market basket they created with the inputs they provided and then being able to compare that inflation rate to other available data points, helping to contextualize it and applying it to their everyday life and providing information that could prove vital to their financial strategies and doing so in an easy to understand way which advises the user throughout the experience of using the tool."),
                                              br(),
-                                             helpText("Users will also be able to compare how their inflation rate differs from the inflation rates of other regions/states generally according to the data from the Bureau of Labor Statistics (BLS) as well as from different years generally as well as the inflation rates of their own market basket"),
+                                             helpText("Users will also be able to compare how their inflat.ion rate differs from the inflation rates of other regions/states generally according to the data from the Bureau of Labor Statistics (BLS) as well as from different years generally as well as the inflation rates of their own market basket"),
                                              br(),
-                                             tags$b("MEET THE TEAM!", style="color:cyan"),
+                                             tags$h1("MEET THE TEAM: ", style="color:red"),
+                                             tags$em("Project Manager - Rodrigo Guerrero"),
                                              br(),
-                                             tags$em("Rodrigo Guerrero"),
+                                             tags$em("'ROLE' - Ian Forsyth"),
                                              br(),
-                                             tags$em("Ian Forsyth"),
+                                             tags$em("'ROLE' - Nick Manuel"),
                                              br(),
-                                             tags$em("Nick Manuel"),
-                                             br(),
-                                             tags$em("Travis Myers")
+                                             tags$em("'ROLE' - Travis Myers")
                                     )
                          )
                              
