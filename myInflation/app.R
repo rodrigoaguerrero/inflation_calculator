@@ -369,7 +369,12 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
    
                 ),
                 hr(),
-                print("Privacy Disclaimer HERE!")
+                print("Privacy Policy: If you require any more information or have any questions about this privacy policy, please feel free to contact one of us by email at si_info@arizona.edu. Someone from the iSchool will contact us on your behalf.
+The privacy of visitors and users is of extreme importance to us. This privacy policy document outlines the types of personal information is received and collected by the MyInflation Calculator and how it is used. 
+
+Log Files: Like many other Web sites and applications, we make use of log files. The information inside the log files includes internet protocol (IP) addresses, type of browser, date/time, referring pages, and cookies to analyze trends, administer the site, track user’s movement around the site, and gather demographic information. IP addresses, cookies, and other such information are not linked to any information that is personally identifiable.
+
+Cookies: The MyInflation Calculator does NOT use cookies to store information about visitor’s preferences (including any numbers or characters inputted into our app). We feel this information is unnecessary to collect and store due to the nature of the applications usage. ")
 
 )
 
