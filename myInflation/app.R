@@ -6,9 +6,22 @@ unlist(all_states, recursive = TRUE, use.names = TRUE)
 
 states_w_metro_areas = read.csv("data/states_w_metro_areas.csv")
 
-items = c("Beef", "Eggs", "Gasoline", "Bread", "Socks")
-base_period_prices = c("")
-rep?
+egCPI_table_creation <- function(){
+  egCPI <- matrix(c(4.80,6.20,
+                    2.29,2.80,
+                    3.32,4.29,
+                    4.75,5.40,
+                    9.50, 12), ncol = 2, byrow = TRUE)
+  colnames(egCPI) <- c("Price in U.S. Dollars in Base Period (2022)", 
+                       "Price in U.S. Dollars in Current Period (2021)")
+  rownames(egCPI) <- c("Beef (per pound)",
+                       "Eggs (per dozen)", 
+                       "Gasoline (per gallon)",
+                       "Bread (per pre-sliced loaf)",
+                       "Socks (per pack of three)")
+  egCPI <- as.table(egCPI)
+  returnValue(egCPI)
+}
 
 library(shiny)
 library(tidyverse)
