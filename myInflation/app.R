@@ -6,6 +6,10 @@ unlist(all_states, recursive = TRUE, use.names = TRUE)
 
 states_w_metro_areas = read.csv("data/states_w_metro_areas.csv")
 
+items = c("Beef", "Eggs", "Gasoline", "Bread", "Socks")
+base_period_prices = c("")
+rep?
+
 library(shiny)
 library(tidyverse)
 library(blscrapeR)
@@ -315,12 +319,22 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                   br(),
                                   tags$b("Consumer Price Index (CPI): "),
                                   tags$h5("The consumer price index (CPI) takes weighted averages of prices of items within a market basket (see above). A CPI is calculated by taking the price changes of each of those items in the market basket and averaging them. Then using the CPI, rates of inflation and deflation can be found."),
-                                  br(),
                                   tags$h5("The formula for a CPI is as follows:"),
                                   tags$h5(img(src = "CPI_Formula.png")),
                                   tags$h5("To illustrate how a CPI is calculated here is an example:"),
+                                  tags$h5("First, let's begin with our Market Basket. For this example, our market basket is much more limited than the market basket that is used by the Bureau of Labor Statistics. In our basket we have the following five items:"),
+                                  tags$b("1. Beef"),
                                   br(),
-                                  tags$h5("First, let's begin with our Market Basket. For this example, our market basket is much more limited than the market basket that is used by the Bureau of Labor Statistics. In our basket we have the following items:"),
+                                  tags$b("2. Eggs"),
+                                  br(),
+                                  tags$b("3. Gasoline"),
+                                  br(),
+                                  tags$b("4. Bread "),
+                                  br(),
+                                  tags$b("5. Socks"),
+                                  br(),
+                                  tags$h5("In order to calculate our CPI we need to know certain data points about these five items. Specifically, we need to know the cost of each of these items in the current period and the cost of each of these items in the base period."),
+                                  tags$h5("For our example, our current period will be the year 2021 and the base period will be the year 2020. In the below table, labeled 'Figure 1' we can see how the prices of each of these items has changed between the base period and the current period."),
                                   tags$b("CPI-U (Consumer Price Index for All Urban Consumers): "),
                                   tags$h5("--definition--"),
                                   br(),
