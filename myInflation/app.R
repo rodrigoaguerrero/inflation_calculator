@@ -1,4 +1,9 @@
-#Load csv of states found in regional resources of BLS with sub regions
+library(shiny)
+library(tidyverse)
+library(blscrapeR)
+library(ggplot2)
+library(shinythemes)
+library(gridExtra)
 
 all_states = read.csv("data/full_state_list.csv")
 
@@ -6,14 +11,15 @@ unlist(all_states, recursive = TRUE, use.names = TRUE)
 
 states_w_metro_areas = read.csv("data/states_w_metro_areas.csv")
 
+library(gridExtra)
 egCPI_table_creation <- function(){
   egCPI <- matrix(c(4.80,6.20,
                     2.29,2.80,
                     3.32,4.29,
                     4.75,5.40,
                     9.50, 12), ncol = 2, byrow = TRUE)
-  colnames(egCPI) <- c("Price in U.S. Dollars in Base Period (2022)", 
-                       "Price in U.S. Dollars in Current Period (2021)")
+  colnames(egCPI) <- c("Price in U.S. Dollars in Current Period (2021)",
+                       "Price in U.S. Dollars in Base Period (2022)")
   rownames(egCPI) <- c("Beef (per pound)",
                        "Eggs (per dozen)", 
                        "Gasoline (per gallon)",
@@ -22,12 +28,7 @@ egCPI_table_creation <- function(){
   egCPI <- as.table(egCPI)
   returnValue(egCPI)
 }
-
-library(shiny)
-library(tidyverse)
-library(blscrapeR)
-library(ggplot2)
-library(shinythemes)
+grid.table(egCPI_table_creation())
 
 ui <- fluidPage(theme = shinytheme("cosmo"),
                 # testing nav bar
@@ -325,7 +326,6 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                   tags$h1("Definitions"),
                                   tags$b("Inflation: "),
                                   tags$h5("Inflation is a decrease in the buying power of money which is caused by the rise in prices of goods and services over a period of time, most commonly a one year period."),
-                                  br(),
                                   tags$b("Market Basket: "),
                                   tags$h5("Because there are innumerable goods and services and not all goods and services are frequently bought by the members of the population and as such would not be instructive in creating a general inflation rate, certain goods and services must be chosen to be a part of the aggregation which creates the general inflation rate."),
                                   tags$h5("The Bureau of Labor Statistics does this by creating a market basket which creates a consumer price index. The market basket is created by taking a monthly survey which is distributed to consumers and from that survey data, a sample of goods and services is generated which can then be used to create a general inflation rate."),
@@ -348,16 +348,18 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                   br(),
                                   tags$h5("In order to calculate our CPI we need to know certain data points about these five items. Specifically, we need to know the cost of each of these items in the current period and the cost of each of these items in the base period."),
                                   tags$h5("For our example, our current period will be the year 2021 and the base period will be the year 2020. In the below table, labeled 'Figure 1' we can see how the prices of each of these items has changed between the base period and the current period."),
+                                  tags$i("Figure 1:"),
+                                  tags$h5(img(src = "price_table.png")),
                                   tags$b("CPI-U (Consumer Price Index for All Urban Consumers): "),
-                                  tags$h5("--definition--"),
+                                  tags$h5("The CPI-U is simply a specific type of CPI which is calculated by taking into account the prices that are paid by urban consumers for a market basket of consumer goods and services. The CPI-U is often the most applicable CPI for most inhabitants of the United States as the majority of inhabitants live in areas which are considered by the U.S. Bureau of Labor Statistics to be 'urban'"),
                                   br(),
                                   # math formulas
-                                  tags$h1("Calculation Formulas"),
-                                  tags$b("Calculating CPI (Consumer Price Index): "),
+                                  tags$h1("Formulas"),
+                                  tags$b("Consumer Price Index (CPI) Formula: "),
                                   tags$h5("The Bureau of Labor Statistics does this by creating a market basket which creates a consumer price index. The market basket is created by taking a monthly survey which is distributed to consumers and from that survey data, a sample of goods and services is generated which can then be used to create a market basket which is representative of general populations."),
                                   tags$h5("CPI = ( Cost of Market Basket in Current Period / Cost of Market Basket in Base Period ) * 100", style="color:red"),
                                   br(),
-                                  tags$b("Calculating Inflation: "),
+                                  tags$b("Inflation Formula"),
                                   tags$h5("( ( Starting Cost - Ending Cost ) / Starting Cost ) x 100", style="color:red")
                          ),
                          
@@ -383,13 +385,12 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                 ),
                 hr(),
                 print("Privacy Policy: If you require any more information or have any questions about this privacy policy, please feel free to contact one of us by email at si_info@arizona.edu. Someone from the iSchool will contact us on your behalf.
-The privacy of visitors and users is of extreme importance to us. This privacy policy document outlines the types of personal information is received and collected by the MyInflation Calculator and how it is used. 
-
-Log Files: Like many other Web sites and applications, we make use of log files. The information inside the log files includes internet protocol (IP) addresses, type of browser, date/time, referring pages, and cookies to analyze trends, administer the site, track user’s movement around the site, and gather demographic information. IP addresses, cookies, and other such information are not linked to any information that is personally identifiable.
-
-Cookies: The MyInflation Calculator does NOT use cookies to store information about visitor’s preferences (including any numbers or characters inputted into our app). We feel this information is unnecessary to collect and store due to the nature of the applications usage. ")
+                The privacy of visitors and users is of extreme importance to us. This privacy policy document outlines the types of personal information is received and collected by the MyInflation Calculator and how it is used. 
+                Log Files: Like many other Web sites and applications, we make use of log files. The information inside the log files includes internet protocol (IP) addresses, type of browser, date/time, referring pages, and cookies to analyze trends, administer the site, track user’s movement around the site, and gather demographic information. IP addresses, cookies, and other such information are not linked to any information that is personally identifiable.
+                Cookies: The MyInflation Calculator does NOT use cookies to store information about visitor’s preferences (including any numbers or characters inputted into our app). We feel this information is unnecessary to collect and store due to the nature of the applications usage. ")
 
 )
+
 
 server <- function(input, output, session){
   # test data
