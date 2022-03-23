@@ -359,7 +359,7 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                               width = 4,
                                               div(style = "white-space: nowrap;",
                                                   h5("If in the Year", style = "display:inline-block"),
-                                                  div(style = "display: inline-block; width: 100%", textInput("infYearInp",label = "", value = "1995", width = 150))
+                                                  div(style = "display: inline-block; width: 100%", textInput("infYearInp",label = "", value = "1913", width = 150))
                                               )
                                                   
                                             )
