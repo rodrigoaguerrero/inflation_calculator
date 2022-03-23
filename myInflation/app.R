@@ -505,7 +505,7 @@ server <- function(input, output, session){
     
     formula <- as.numeric(input$infPriceInp) * (as.numeric(cpi2) / as.numeric(cpi1))
     perChange <- (formula - as.numeric(input$infPriceInp)) / as.numeric(input$infPriceInp)
-    paste("That same item would cost: $", formula)
+    paste("That same item would cost: $", round(formula,2))
   })
 }
 
