@@ -52,7 +52,12 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                  
                                ), 
                                
-                               h3("Personal Inputs"),
+                               # Personal Input title and Advanced settings checkbox
+                               conditionalPanel(
+                                 condition = "input.tabSelected == 1",
+                                 h3("Personal Inputs"),
+                                 checkboxInput("advancedSet", "Advanced", FALSE)
+                               ),
                                br(),
                                conditionalPanel(
                                  condition = "input.tabSelected == 1",
@@ -69,13 +74,13 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                
                                # Type of eaters
                                conditionalPanel(
-                                 condition = "input.tabSelected == 1",
+                                 condition = "input.tabSelected == 1 && input.advancedSet == 1",
                                  selectInput("eaterType", "What is your Eating Lifestyle?", c("Omnivore", "Carnivore", "Pollotarian",
                                                                                               "Pescetarian", "Vegetarian", "Vegan"))
                                ),
                                # food groups
                                conditionalPanel(
-                                 condition = "input.tabSelected == 1 && input.eaterType != 'Omnivore'",
+                                 condition = "input.tabSelected == 1 && input.eaterType != 'Omnivore' && input.advancedSet == 1",
                                  checkboxGroupInput("foodGroups", "Select the Foods you Buy", c("Bread" = "bread",
                                                                                                 "Red Meats" = "redmeat",
                                                                                                 "Poultry" = "whitemeat",
@@ -91,7 +96,7 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                ),
                                # Renting or Mortgage?
                                conditionalPanel(
-                                 condition = "input.tabSelected == 1",
+                                 condition = "input.tabSelected == 1 && input.advancedSet == 1",
                                  selectInput("rentBuy", "Are you Renting, Buying, or Own?", c("Renting", "Buying w/Mortgage", "Own"))
                                ),
                                # Housing Expenses
@@ -102,7 +107,7 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                ),
                                # Public or Private
                                conditionalPanel(
-                                 condition = "input.tabSelected == 1",
+                                 condition = "input.tabSelected == 1 && input.advancedSet == 1",
                                  selectInput("transPrivatePublic", "What Type of Transportation?", c("Private", "Public"))
                                ),
                                # Transportation
@@ -340,17 +345,44 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                           br(),
                                           br(),
                                           radioButtons("plotType", "Purchasing Power Trend ($)",c("Inflation Trend")),
-                                           sliderInput("yearInput", "Select Year:",
+                                          sliderInput("yearInput", "Select Year:",
                                                       min = 2011, max = 2021, value = 2015, sep = "", animate = animationOptions(interval = 500, loop = TRUE)),
                                           plotOutput("inflateplot")
+                                          
                                           
                                  ),
                                  
                                  # tab for dollar checker page
                                  tabPanel("Dollar Comparison", value = 2,
-                                          helpText("Embedded Calculator tool goes here"),
-                                          br(),
-                                          helpText("*****WORK IN PROGRESS*****")
+                                          fluidRow(
+                                            column(
+                                              width = 4,
+                                              div(style = "white-space: nowrap;",
+                                                  h5("If in the Year", style = "display:inline-block"),
+                                                  div(style = "display: inline-block; width: 100%", textInput("infYearInp",label = "", value = "1995", width = 150))
+                                              )
+                                                  
+                                            )
+                                          ),
+                                          fluidRow(
+                                            column(
+                                              width = 4,
+                                              div(style = "white-space: nowrap;",
+                                                  h5("and you Purchased an Item worth $", style = "display:inline-block"),
+                                                  div(style = "display:inline-block; width: 100%", textInput("infPriceInp", label = "", value = "20.11", width = 150))
+                                                  )
+                                            )
+                                          ),
+                                          fluidRow(
+                                            column(
+                                              width = 4,
+                                              div(style = "white-space: nowrap;",
+                                                  h5("then in the Year", style = "display:inline-block"),
+                                                  div(style = "display:inline-block; width: 100%", textInput("infThenInp", label = "", value = "2022", width = 150))
+                                                  )
+                                            )
+                                          ),
+                                           textOutput("dollarComp")
                                           ),
                                  
                                  id = "tabSelected"
@@ -433,13 +465,23 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
 
 server <- function(input, output, session){
   # test data
-  # data <- data <- bls_api("CUUR0000SA0R",startyear = 2011, endyear = 2021, Sys.getenv("BLS_KEY"))
-  # data <- data %>%
-  #   mutate(
-  #     periodName = factor(periodName, levels = month.name)
-  #   ) %>%
-  #   arrange(periodName)
-  
+  data <- data <- bls_api("CUUR0000SA0R",startyear = 2011, endyear = 2020, Sys.getenv("BLS_KEY"))
+  data <- data %>%
+    mutate(
+      periodName = factor(periodName, levels = month.name)
+    ) %>%
+    arrange(periodName)
+  # test output render 
+  output$inflateplot <- renderPlot({
+    if (input$plotType == "Inflation Trend") {
+      data_filtered <- data %>%
+        filter(year == input$yearInput)
+      ggplot(data_filtered, aes(periodName, value, group = 1)) +
+        geom_line() + 
+        geom_point() +
+        theme_classic()
+    }
+  })
   # text outputs
   # personal rate
   output$personalRate <- renderText({
@@ -454,6 +496,16 @@ server <- function(input, output, session){
   # Weighted Individual Inflation Rate
   output$weightRate <- renderText({
     paste("Your Weighted Individual Inflation Rate: ", input$recInput)
+  })
+  output$dollarComp <- renderText({
+    data1 <- bls_api("CUUR0000SA0",startyear = input$infYearInp, endyear = input$infYearInp, Sys.getenv("BLS_KEY"))
+    data2 <- bls_api("CUUR0000SA0",startyear = input$infThenInp, endyear = input$infThenInp, Sys.getenv("BLS_KEY"))
+    cpi1 <- data1$value[1]
+    cpi2 <- data2$value[1]
+    
+    formula <- as.numeric(input$infPriceInp) * (as.numeric(cpi2) / as.numeric(cpi1))
+    perChange <- (formula - as.numeric(input$infPriceInp)) / as.numeric(input$infPriceInp)
+    paste("That same item would cost: $", formula)
   })
 }
 
