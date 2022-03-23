@@ -51,20 +51,59 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                  tags$em("The tool uses the latest US government CPI data published on February 10, 2022 to adjust for inflation and calculate the cumulative inflation rate through January 2022. The U.S. Labor Department's Bureau of Labor Statistics will release the Consumer Price Index (CPI) with inflation data for February on March 10, 2022. (See a chart of recent inflation rates.)")
                                  
                                ), 
+                               
+                               h3("Personal Inputs"),
                                br(),
+                               conditionalPanel(
+                                 condition = "input.tabSelected == 1",
+                                 textInput("incomeInput", "Income")
+                               ),
 
-                               # OTHER INPUTS:
+                               # OTHER INPUTS
+                               
+                               # Start and End Year selection
+                               # conditionalPanel(
+                               #   condition = "input.tabSelected == 1",
+                               #   sliderInput("startEndYear", "Select Year Range", min = 1999, max = 2022, sep = "", value = c(2000, 2010))
+                               # ),
+                               
+                               # Type of eaters
+                               conditionalPanel(
+                                 condition = "input.tabSelected == 1",
+                                 selectInput("eaterType", "What is your Eating Lifestyle?", c("Omnivore", "Carnivore", "Pollotarian",
+                                                                                              "Pescetarian", "Vegetarian", "Vegan"))
+                               ),
+                               # food groups
+                               conditionalPanel(
+                                 condition = "input.tabSelected == 1 && input.eaterType != 'Omnivore'",
+                                 checkboxGroupInput("foodGroups", "Select the Foods you Buy", c("Bread" = "bread",
+                                                                                                "Red Meats" = "redmeat",
+                                                                                                "Poultry" = "whitemeat",
+                                                                                                "Fruits" = "fruit",
+                                                                                                "Vegetables" = "veg",
+                                                                                                "Other" = "ot."))
+                               ), 
                                # Monthly Food expenses
                                conditionalPanel(
                                  condition = "input.tabSelected == 1",
                                  sliderInput("foodInput", "Your Monthly Food Expenses: ",
                                              min = 0, max = 5000, value = 1200, sep = "")
                                ),
+                               # Renting or Mortgage?
+                               conditionalPanel(
+                                 condition = "input.tabSelected == 1",
+                                 selectInput("rentBuy", "Are you Renting, Buying, or Own?", c("Renting", "Buying w/Mortgage", "Own"))
+                               ),
                                # Housing Expenses
                                conditionalPanel(
                                  condition = "input.tabSelected == 1",
                                  sliderInput("housingInput", "Your Monthly Housing Expenses: ",
                                              min = 0, max = 10000, value = 8200, sep = "")
+                               ),
+                               # Public or Private
+                               conditionalPanel(
+                                 condition = "input.tabSelected == 1",
+                                 selectInput("transPrivatePublic", "What Type of Transportation?", c("Private", "Public"))
                                ),
                                # Transportation
                                conditionalPanel(
@@ -394,24 +433,12 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
 
 server <- function(input, output, session){
   # test data
-  data <- data <- bls_api("CUUR0000SA0R",startyear = 2011, endyear = 2021, Sys.getenv("BLS_KEY"))
-  data <- data %>%
-    mutate(
-      periodName = factor(periodName, levels = month.name)
-    ) %>%
-    arrange(periodName)
-  
-  # test output render
-  output$inflateplot <- renderPlot({
-    if (input$plotType == "Inflation Trend") {
-      data_filtered <- data %>%
-        filter(year == input$yearInput)
-      ggplot(data_filtered, aes(periodName, value, group = 1)) +
-        geom_line() + 
-        geom_point() +
-        theme_classic()
-    }
-  })
+  # data <- data <- bls_api("CUUR0000SA0R",startyear = 2011, endyear = 2021, Sys.getenv("BLS_KEY"))
+  # data <- data %>%
+  #   mutate(
+  #     periodName = factor(periodName, levels = month.name)
+  #   ) %>%
+  #   arrange(periodName)
   
   # text outputs
   # personal rate
