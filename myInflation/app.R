@@ -13,11 +13,14 @@ states_w_metro_areas = read.csv("data/states_w_metro_areas.csv")
 
 library(gridExtra)
 egCPI_table_creation <- function(){
-  egCPI <- matrix(c(4.80,6.20,
-                    2.29,2.80,
-                    3.32,4.29,
-                    4.75,5.40,
-                    9.50, 12), ncol = 2, byrow = TRUE)
+  egCPI <- matrix(
+    c(4.80,6.20,
+      2.29,2.80,
+      3.32,4.29,
+      4.75,5.40,
+      9.50, 12), 
+    ncol = 2,
+    byrow = TRUE)
   colnames(egCPI) <- c("Price in U.S. Dollars in Current Period (2021)",
                        "Price in U.S. Dollars in Base Period (2022)")
   rownames(egCPI) <- c("Beef (per pound)",
@@ -26,9 +29,33 @@ egCPI_table_creation <- function(){
                        "Bread (per pre-sliced loaf)",
                        "Socks (per pack of three)")
   egCPI <- as.table(egCPI)
+  grid.table(egCPI)
   returnValue(egCPI)
 }
-grid.table(egCPI_table_creation())
+CPI2_table_creation <- function(){
+  egCPI <- matrix(c(4.80,6.20, 77.42,
+                    2.29,2.80, 81.79,
+                    3.32,4.29, 77.39,
+                    4.75,5.40, 87.96,
+                    9.50, 12, 79.17),
+                  ncol = 3, 
+                  byrow = TRUE)
+  colnames(egCPI) <- c("Price in U.S. Dollars in Current Period (2022)",
+                       "Price in U.S. Dollars in Base Period (2021)",
+                       "CPI of Item between Current Period (2022) and Base Period (2021)")
+  rownames(egCPI) <- c("Beef (per pound)",
+                       "Eggs (per dozen)", 
+                       "Gasoline (per gallon)",
+                       "Bread (per pre-sliced loaf)",
+                       "Socks (per pack of three)")
+  egCPI <- as.table(egCPI)
+  grid.table(egCPI)
+  returnValue(egCPI)
+
+egCPI_table_creation
+CPI2_table_creation()
+
+
 
 ui <- fluidPage(theme = shinytheme("cosmo"),
                 # testing nav bar
@@ -421,6 +448,9 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                   tags$h5("For our example, our current period will be the year 2021 and the base period will be the year 2020. In the below table, labeled 'Figure 1' we can see how the prices of each of these items has changed between the base period and the current period."),
                                   tags$i("Figure 1:"),
                                   tags$h5(img(src = "price_table.png")),
+                                  tags$h5("Now using the above price table, we can calculate the CPI by taking the quotient of the cost of the itemin the current period and the cost in the base period and multiply it by 100. The result of that calculuation can be seen in figure 2 which is identitcal to figure 1 with the exception of the addition of a column denoting the CPI."),
+                                  tags$i("Figure 1:"),
+                                  tags$h5(img(src = "price_table_w_cpi.png")),
                                   tags$b("CPI-U (Consumer Price Index for All Urban Consumers): "),
                                   tags$h5("The CPI-U is simply a specific type of CPI which is calculated by taking into account the prices that are paid by urban consumers for a market basket of consumer goods and services. The CPI-U is often the most applicable CPI for most inhabitants of the United States as the majority of inhabitants live in areas which are considered by the U.S. Bureau of Labor Statistics to be 'urban'"),
                                   br(),
