@@ -51,6 +51,7 @@ CPI2_table_creation <- function(){
   egCPI <- as.table(egCPI)
   grid.table(egCPI)
   returnValue(egCPI)
+}
 
 egCPI_table_creation
 CPI2_table_creation()
