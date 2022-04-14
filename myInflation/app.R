@@ -11,7 +11,6 @@ unlist(all_states, recursive = TRUE, use.names = TRUE)
 
 states_w_metro_areas = read.csv("data/states_w_metro_areas.csv")
 
-library(gridExtra)
 egCPI_table_creation <- function(){
   egCPI <- matrix(
     c(4.80,6.20,
@@ -21,8 +20,8 @@ egCPI_table_creation <- function(){
       9.50, 12), 
     ncol = 2,
     byrow = TRUE)
-  colnames(egCPI) <- c("Price in U.S. Dollars in Current Period (2021)",
-                       "Price in U.S. Dollars in Base Period (2022)")
+  colnames(egCPI) <- c("Price in U.S. Dollars during Base Period (2021)",
+                       "Price in U.S. Dollars during Current Period (2022)")
   rownames(egCPI) <- c("Beef (per pound)",
                        "Eggs (per dozen)", 
                        "Gasoline (per gallon)",
@@ -32,30 +31,30 @@ egCPI_table_creation <- function(){
   grid.table(egCPI)
   returnValue(egCPI)
 }
+
 CPI2_table_creation <- function(){
-  egCPI <- matrix(c(4.80,6.20, 77.42,
-                    2.29,2.80, 81.79,
-                    3.32,4.29, 77.39,
-                    4.75,5.40, 87.96,
-                    9.50, 12, 79.17),
+  egCPI <- matrix(c(4.80,6.20, 129.17,
+                    2.29,2.80, 122.27,
+                    3.32,4.29, 129.22,
+                    4.75,5.40, 113.68,
+                    9.50, 12.00, 126.32),
+                  #rounded to the nearest .00
                   ncol = 3, 
                   byrow = TRUE)
-  colnames(egCPI) <- c("Price in U.S. Dollars in Current Period (2022)",
-                       "Price in U.S. Dollars in Base Period (2021)",
-                       "CPI of Item between Current Period (2022) and Base Period (2021)")
+  colnames(egCPI) <- c("Price in U.S. Dollars in Base Period (2021)",
+                       "Price in U.S. Dollars in Current Period (2022)",
+                       "CPI of Item between Base Period (2021) and Current Period (2022)")
   rownames(egCPI) <- c("Beef (per pound)",
                        "Eggs (per dozen)", 
                        "Gasoline (per gallon)",
                        "Bread (per pre-sliced loaf)",
                        "Socks (per pack of three)")
+  tt <- ttheme_default(colhead=list(fg_params = list(parse=TRUE)))
   egCPI <- as.table(egCPI)
-  grid.table(egCPI)
+  grid.table(egCPI, theme = tt)
+  help("grid.table")
   returnValue(egCPI)
 }
-
-egCPI_table_creation
-CPI2_table_creation()
-
 
 
 ui <- fluidPage(theme = shinytheme("cosmo"),
@@ -444,14 +443,15 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                   tags$h1("Definitions"),
                                   tags$b("Inflation: "),
                                   tags$h5("Inflation is a decrease in the buying power of money which is caused by the rise in prices of goods and services over a period of time, most commonly a one year period."),
-                                  tags$b("Market Basket: "),
-                                  tags$h5("Because there are innumerable goods and services and not all goods and services are frequently bought by the members of the population and as such would not be instructive in creating a general inflation rate, certain goods and services must be chosen to be a part of the aggregation which creates the general inflation rate."),
-                                  tags$h5("The Bureau of Labor Statistics does this by creating a market basket which creates a consumer price index. The market basket is created by taking a monthly survey which is distributed to consumers and from that survey data, a sample of goods and services is generated which can then be used to create a general inflation rate."),
-                                  br(),
                                   tags$b("Consumer Price Index (CPI): "),
-                                  tags$h5("The consumer price index (CPI) takes weighted averages of prices of items within a market basket (see above). A CPI is calculated by taking the price changes of each of those items in the market basket and averaging them. Then using the CPI, rates of inflation and deflation can be found."),
-                                  tags$h5("The formula for a CPI is as follows:"),
+                                  tags$h5("The consumer price index (CPI) is an instrument used to measure the inflation rate. It estimates the variation in price of a good or service between two different periods of time. "),
+                                  tags$h5("It is calculated by taking the quotient of the price of a good or service in the current period and dividing it by the price of the same good or service in the base period and multiplying the quotient by one hundred (see Figure 1)."),
+                                  tags$i("Figure 1:"),
                                   tags$h5(img(src = "CPI_Formula.png")),
+                                  tags$b("Market Basket: "),
+                                  tags$h5("A Market Basket is a tool utilized to create a CPI for a variety of goods and services which are within a market basket. A bundle of goods and services which serve as a representative sample of what goods and services are purchased by the average consumer of a population is what constitutes a market basket."),
+                                  tags$h5("Often, the prices of items in a market basket are recorded over multiple periods of time to determine the CPI at various points in time and ultimately, calculate an inflation rate between any town points in time in which a CPI has been calculated and recorded."),
+                                  tags$h1("An Example"),
                                   tags$h5("To illustrate how a CPI is calculated here is an example:"),
                                   tags$h5("First, let's begin with our Market Basket. For this example, our market basket is much more limited than the market basket that is used by the Bureau of Labor Statistics. In our basket we have the following five items:"),
                                   tags$b("1. Beef"),
@@ -469,7 +469,7 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                   tags$i("Figure 1:"),
                                   tags$h5(img(src = "price_table.png")),
                                   tags$h5("Now using the above price table, we can calculate the CPI by taking the quotient of the cost of the itemin the current period and the cost in the base period and multiply it by 100. The result of that calculuation can be seen in figure 2 which is identitcal to figure 1 with the exception of the addition of a column denoting the CPI."),
-                                  tags$i("Figure 1:"),
+                                  tags$i("Figure 2:"),
                                   tags$h5(img(src = "price_table_w_cpi.png")),
                                   tags$b("CPI-U (Consumer Price Index for All Urban Consumers): "),
                                   tags$h5("The CPI-U is simply a specific type of CPI which is calculated by taking into account the prices that are paid by urban consumers for a market basket of consumer goods and services. The CPI-U is often the most applicable CPI for most inhabitants of the United States as the majority of inhabitants live in areas which are considered by the U.S. Bureau of Labor Statistics to be 'urban'"),
