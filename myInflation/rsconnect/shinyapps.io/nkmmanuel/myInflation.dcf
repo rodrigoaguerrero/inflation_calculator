@@ -1,0 +1,13 @@
+name: myInflation
+title: myInflation
+username:
+account: nkmmanuel
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 6107633
+bundleId: 5807357
+url: https://nkmmanuel.shinyapps.io/myInflation/
+when: 1650217982.59569
+lastSyncTime: 1650217982.59569
+asMultiple: FALSE
+asStatic: FALSE
