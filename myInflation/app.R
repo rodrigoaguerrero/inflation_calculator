@@ -23,8 +23,7 @@ egCPI_table_creation <- function(){
     byrow = TRUE)
   colnames(egCPI) <- c("Price in U.S. Dollars during Base Period (2021)",
                        "Price in U.S. Dollars during Current Period (2022)")
-  colnames(egCPI) <- c("Price in U.S. Dollars in Current Period (2020)",
-                       "Price in U.S. Dollars in Base Period (2021)")
+
   rownames(egCPI) <- c("Beef (per pound)",
                        "Eggs (per dozen)", 
                        "Gasoline (per gallon)",
@@ -44,15 +43,10 @@ CPI2_table_creation <- function(){
                   #rounded to the nearest .00
                   ncol = 3, 
                   byrow = TRUE)
-#Updated upstream
+
   colnames(egCPI) <- c("Price in U.S. Dollars in Base Period (2021)",
                        "Price in U.S. Dollars in Current Period (2022)",
                        "CPI of Item between Base Period (2021) and Current Period (2022)")
-
-  colnames(egCPI) <- c("Price in U.S. Dollars in Current Period (2021)",
-                       "Price in U.S. Dollars in Base Period (2020)",
-                       "CPI of Item between Current Period (2021) and Base Period (2020)")
-#Stashed changes
   rownames(egCPI) <- c("Beef (per pound)",
                        "Eggs (per dozen)", 
                        "Gasoline (per gallon)",
@@ -102,12 +96,20 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                conditionalPanel(
                                  condition = "input.tabSelected == 1",
                                  h3("Personal Inputs"),
-                                 checkboxInput("advancedSet", "Advanced", FALSE)
+                                 h6("Used to generate a unique inflation report based on your own purchasing habits."),
+                                 br(),
+                                 checkboxInput("advancedSet", "Advanced", FALSE),
+                                 h6("Check for more detailed settings and inflation report.")
                                ),
                                br(),
                                conditionalPanel(
                                  condition = "input.tabSelected == 1 && input.advancedSet == 1",
-                                 textInput("incomeInput", "Income", value = "")
+                                 textInput("incomeInput", "Annual Income in ($)", value = ""),
+                                 conditionalPanel(
+                                   condition = "input.incomeInput == ''",
+                                   h5("ex. 36,000 or 36000")
+                                 )
+                                 
                                ),
                                
 
@@ -177,10 +179,11 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                  sliderInput("fruitInput", "Your Monthly Fruit and Vegetable Expenses, in dollars: ",
                                              min = 0, max = 300, value = 22, sep = "")
                                ),
+                               
                                # food groups
                                conditionalPanel(
                                  condition = "input.tabSelected == 1 && input.advancedSet == 1",
-                                 h5("Do You Buy These Items Frequently?")
+                                 tags$b("Do You Buy These Items Frequently?")
                                ), 
                                conditionalPanel(
                                  condition = "input.tabSelected == 1 && input.advancedSet == 1",
@@ -218,25 +221,36 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                              min = 0, max = 200, value = 230)
                                ),
                                conditionalPanel(
+                                 condition = "input.tabSelected == 1 && input.advancedSet == 1 && input.sugarCheckbox == 1",
+                                 sliderInput("sugarInput", "How Much do you Spend on Sugar Monthly",
+                                             min = 0, max = 100, value = 80, sep="")
+                               ),
+                               conditionalPanel(
+                                 condition = "input.tabSelected == 1 && input.advancedSet == 1 && input.alcCheckbox == 1",
+                                 sliderInput("alcInput", "How Much do you Spend on Alcohol Monthly",
+                                             min = 0, max = 250, value = 230)
+                               ),
+                               conditionalPanel(
                                  condition = "input.tabSelected == 1 && input.advancedSet == 1 && input.milkCheckbox == 1",
                                  sliderInput("milkInput", "How much, in dollars, do you spend on Milk Monthly?",
                                              min = 0, max = 50, value = 110)
                                ),
                                conditionalPanel(
                                  condition = "input.tabSelected == 1 && input.advancedSet == 1 && input.fatOilCheckbox == 1",
-                                 sliderInput("fatInput", "How much, in dollars do you spend on Fats and Oils Monthly?",
-                                             min = 0, max = 300, value = 23)
+                                 sliderInput("fatInput", "How Much do you Spend on Fats and Oils Monthly",
+                                             min = 0, max = 150, value = 23)
                                ),
                                # Renting or Mortgage?
                                conditionalPanel(
                                  condition = "input.tabSelected == 1 && input.advancedSet == 1",
-                                 selectInput("rentBuy", "Do you rent your home, own with a mortgage or own without a mortgage?", c("Renting", "Own w/ Mortgage", "Own"))
+
+                                 selectInput("rentBuy", "Do you Rent, Own W/Mortgage, or Outright Own?", c("Renting", "Own w/Mortgage", "Own"))
                                ),
                                # Housing Expenses
                                conditionalPanel(
                                  condition = "input.tabSelected == 1",
-                                 sliderInput("housingInput", "Your Monthly Housing Expenses (in dollars): ",
-                                             min = 0, max = 5000, value = 8200, sep = "")
+                                 sliderInput("housingInput", "Your Monthly Housing Expenses: ",
+                                             min = 0, max = 3000, value = 8200, sep = "")
                                ),
                                # Public or Private
                                conditionalPanel(
@@ -246,14 +260,14 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                # Transportation
                                conditionalPanel(
                                  condition = "input.tabSelected == 1",
-                                 sliderInput("transInput", "Your Monthly Transportation Expenses, in dollars: ",
-                                             min = 0, max = 1000, value = 3200, sep = "")
+                                 sliderInput("transInput", "Your Monthly Transportation Expenses: ",
+                                             min = 0, max = 500, value = 3200, sep = "")
                                ),
                                # Medical
                                conditionalPanel(
                                  condition = "input.tabSelected == 1",
-                                 sliderInput("medInput", "Your Monthly Medical Expenses, in dollars: ",
-                                             min = 0, max = 10000, value = 480, sep = "")
+                                 sliderInput("medInput", "Your Monthly Medical Expenses: ",
+                                             min = 0, max = 500, value = 480, sep = "")
                                ),
                                # Communication/Education
                                conditionalPanel(
@@ -264,8 +278,9 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                # advanced phone 
                                conditionalPanel(
                                  condition = "input.tabSelected == 1 && input.advancedSet ==1",
-                                 sliderInput("comInput", "Your Monthly Phone Expenses, in dollars: ",
-                                             min = 0, max = 500, value = 130, sep = "")
+
+                                 sliderInput("comInput", "Your Monthly Phone Expenses: ",
+                                             min = 0, max = 250, value = 130, sep = "")
                                ),
                                # advanced education
                                conditionalPanel(
@@ -277,20 +292,20 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                ),
                                conditionalPanel(
                                  condition = "input.tabSelected == 1 && input.advancedSet == 1",
-                                 sliderInput("eduInput", "Your Monthly Education Expenses, in dollars:",
-                                             min = 0, max = 50000, value = 300, sep = "")
+                                 sliderInput("eduInput", "Your Monthly Education Expenses:",
+                                             min = 0, max = 25000, value = 300, sep = "")
                                ),
                                # Clothing
                                conditionalPanel(
                                  condition = "input.tabSelected == 1",
-                                 sliderInput("clothInput", "Your Monthly Apparel Expenses, in dollars: ",
-                                             min = 0, max = 5000, value = 4000, sep = "")
+                                 sliderInput("clothInput", "Your Monthly Apparel Expense: ",
+                                             min = 0, max = 500, value = 4000, sep = "")
                                ),
                                # Recreation
                                conditionalPanel(
                                  condition = "input.tabSelected == 1",
-                                 sliderInput("recInput", "Your Monthly Recreational Expenses, in dollars: ",
-                                             min = 0, max = 3000, value = 250, sep = "")
+                                 sliderInput("recInput", "Your Monthly Recreational Expenses: ",
+                                             min = 0, max = 1000, value = 250, sep = "")
                                )
                                
                              ),
@@ -315,10 +330,10 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                           br(),
                                           br(),
                                           
-                                          textOutput("personalRate"),
+                                          uiOutput("personalRate"),
                                           
                                           br(),
-                                          textOutput("usRate"),
+                                          uiOutput("usRate"),
                                           br(),
                                           textOutput("weightRate"),
                                           actionButton("go", "Get Personal Inflation Results"),
@@ -448,11 +463,11 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                              tags$h1("MEET THE TEAM: ", style="color:red"),
                                              tags$em("Project Manager - Rodrigo Guerrero"),
                                              br(),
-                                             tags$em("'ROLE' - Ian Forsyth"),
+                                             tags$em("Ian Forsyth"),
                                              br(),
-                                             tags$em("'ROLE' - Nick Manuel"),
+                                             tags$em("Nick Manuel"),
                                              br(),
-                                             tags$em("'ROLE' - Travis Myers")
+                                             tags$em("Travis Myers")
                                     )
                          )
    
@@ -468,7 +483,7 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
 
 server <- function(input, output, session){
   # test data
-  inflateData <- bls_api("CUUR0000SA0R",startyear = 2011, endyear = 2020, "04b92e5f5d22471f8190da23796fda75")
+  inflateData <- bls_api("CUUR0000SA0R",startyear = 2011, endyear = 2020, "a1ce6f946a4d4316a95bbb03bba00b45")
   inflateData <- inflateData %>%
     mutate(
       periodName = factor(periodName, levels = month.name)
@@ -586,7 +601,7 @@ server <- function(input, output, session){
       # if user selected metro_area, didn't select "own", and we have the series ID in our dataset
       if (input$metro_area != "None" && metro_series$rent[index] != "" && input$rentBuy != "Own") {
         rentData <- metro_series$rent[index]
-        rentData <- bls_api(metro_series$rent[index], startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+        rentData <- bls_api(metro_series$rent[index], startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
           group_by(year) %>%
           summarise_at(vars(value), list(name = mean))
         cpiRent1 <- rentData$name[1]
@@ -595,14 +610,14 @@ server <- function(input, output, session){
       } # if user selected a metro_area, have the data, and selected own
       else if (input$metro_area != "None" && metro_series$rent[index] != "" && input$rentBuy == "Own") {
         rentData <- metro_series$own[index]
-        rentData <- bls_api(metro_series$own[index], startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+        rentData <- bls_api(metro_series$own[index], startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
           group_by(year) %>%
           summarise_at(vars(value), list(name = mean))
         cpiRent1 <- rentData$name[1]
         cpiRent2 <- rentData$name[2]
         
       } else {    # no metro area data for rent, use us city avg or user didn't select a metro area 
-        rentData <- bls_api("CWUR0000SAS2RS", startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+        rentData <- bls_api("CWUR0000SAS2RS", startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
           group_by(year) %>%
           summarise_at(vars(value), list(name = mean))
         cpiRent1 <- rentData$name[1]
@@ -617,7 +632,7 @@ server <- function(input, output, session){
       }
       else if (input$eduTypeInput == "elehs" && input$metro_area != "None" && is.na(metro_series$school[index]) != TRUE) {
         eduData <- metro_series$school[index]
-        eduData <- bls_api(eduData, startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+        eduData <- bls_api(eduData, startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
           group_by(year) %>%
           summarise_at(vars(value), list(name = mean))
         cpiEdu1 <- eduData$name[1]
@@ -627,7 +642,7 @@ server <- function(input, output, session){
       
       else if (input$eduTypeInput == "elehs" && input$metro_area == "None" && mis.na(metro_series$school[index]) != TRUE || input$metro_area == "None" && input$eduTypeInput == "elehs") {
         print("elementary no metro")
-        eduData <- bls_api(us_series$school, startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+        eduData <- bls_api(us_series$school, startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
           group_by(year) %>%
           summarise_at(vars(value), list(name = mean))
         cpiEdu1 <- eduData$name[1]
@@ -635,14 +650,14 @@ server <- function(input, output, session){
       }
       # if user selected "College", no metro data for this one
       else if (input$eduTypeInput == "tuition") {
-        eduData <- bls_api(us_series$tutition, startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+        eduData <- bls_api(us_series$tutition, startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
           group_by(year) %>%
           summarise_at(vars(value), list(name = mean))
         cpiEdu1 <- eduData$name[1]
         cpiEdu2 <- eduData$name[2]
       }
       else {
-        eduData <- bls_api(us_series$school, startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+        eduData <- bls_api(us_series$school, startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
           group_by(year) %>%
           summarise_at(vars(value), list(name = mean))
         cpiEdu1 <- eduData$name[1]
@@ -652,7 +667,7 @@ server <- function(input, output, session){
       # advanced medical cpi fetcher
       # if user picked a metro area and we have the data stored
       if (input$metro_area != "None" && is.na(metro_series$medical[index]) != TRUE) {
-        medicalData <- bls_api(metro_series$medical[index], startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+        medicalData <- bls_api(metro_series$medical[index], startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
           group_by(year) %>%
           summarise_at(vars(value), list(name = mean))
         cpiMedical1 <- medicalData$name[1]
@@ -661,7 +676,7 @@ server <- function(input, output, session){
       }
       # if user selected metro area and we don't have data stored or just didn't select metro area
       else {
-        medicalData <- bls_api(us_series$medical, startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+        medicalData <- bls_api(us_series$medical, startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
           group_by(year) %>%
           summarise_at(vars(value), list(name = mean))
         cpiMedical1 <- medicalData$name[1]
@@ -672,7 +687,7 @@ server <- function(input, output, session){
       # if user selected a metro area and we have the data for it
       if (input$metro_area != "None" && metro_series$clothes[index] != "") {
         print("clothe check 1")
-        clothData <- bls_api(metro_series$clothes[index], startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+        clothData <- bls_api(metro_series$clothes[index], startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
           group_by(year) %>%
           summarise_at(vars(value), list(name = mean))
         cpiCloth1 <- clothData$name[1]
@@ -680,7 +695,7 @@ server <- function(input, output, session){
       }
       # user didn't select a metro area or they did and we don't have the data
       else {
-        clothData <- bls_api(us_series$clothes, startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+        clothData <- bls_api(us_series$clothes, startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
           group_by(year) %>%
           summarise_at(vars(value), list(name = mean))
         cpiCloth1 <- clothData$name[1]
@@ -691,7 +706,7 @@ server <- function(input, output, session){
       
       if (input$metro_area != "None" && input$transPrivatePublic == "Private" && metro_series$fuel[index] != "") {
         print("metro area, private transport, data")
-        travelData <- bls_api(metro_series$fuel[index], startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+        travelData <- bls_api(metro_series$fuel[index], startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
           group_by(year) %>%
           summarise_at(vars(value), list(name = mean))
         cpiTravel1 <- travelData$name[1]
@@ -699,7 +714,7 @@ server <- function(input, output, session){
       }
       # if user selected "private" but we don't have the data or they didn't select a metro
       else if (input$transPrivatePublic == "Private" && input$metro_area != "None" && metro_series$fuel[index] == "") {
-        travelData <- bls_api(us_series$fuel, startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+        travelData <- bls_api(us_series$fuel, startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
           group_by(year) %>%
           summarise_at(vars(value), list(name = mean))
         cpiTravel1 <- travelData$name[1]
@@ -707,7 +722,7 @@ server <- function(input, output, session){
       }
       # user selected "private" and didn't select metro
       else if (input$transPrivatePublic == "Private" && input$metro_area == "None") {
-        travelData <- bls_api(us_series$fuel, startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+        travelData <- bls_api(us_series$fuel, startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
           group_by(year) %>%
           summarise_at(vars(value), list(name = mean))
         cpiTravel1 <- travelData$name[1]
@@ -720,7 +735,7 @@ server <- function(input, output, session){
         
         # income <69,999
         if (income < 70000) {
-          travelData <- bls_api(income_series$X15000.29999[1], startyear = 2018, endyear = 2019, "04b92e5f5d22471f8190da23796fda75") %>%
+          travelData <- bls_api(income_series$X15000.29999[1], startyear = 2018, endyear = 2019, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
             group_by(year) %>%
             summarise_at(vars(value), list(name = mean))
           cpiTravel1 <- travelData$name[1]
@@ -728,7 +743,7 @@ server <- function(input, output, session){
         } 
         # 69,999 < income < 99,999
         else if (income < 99999 && income > 69999) {
-          travelData <- bls_api(income_series$X70000.99999[1], startyear = 2018, endyear = 2019, "04b92e5f5d22471f8190da23796fda75") %>%
+          travelData <- bls_api(income_series$X70000.99999[1], startyear = 2018, endyear = 2019, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
             group_by(year) %>%
             summarise_at(vars(value), list(name = mean))
           cpiTravel1 <- travelData$name[1]
@@ -736,7 +751,7 @@ server <- function(input, output, session){
         }
         # 100,000 < income < 149,999
         else if (income < 149999 && income > 99999) {
-          travelData <- bls_api(income_series$X100000.149999[1], startyear = 2018, endyear = 2019, "04b92e5f5d22471f8190da23796fda75") %>%
+          travelData <- bls_api(income_series$X100000.149999[1], startyear = 2018, endyear = 2019, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
             group_by(year) %>%
             summarise_at(vars(value), list(name = mean))
           cpiTravel1 <- travelData$name[1]
@@ -744,7 +759,7 @@ server <- function(input, output, session){
         }
         # 150,000 < income < 199,999
         else if (income < 199999 && income > 149999) {
-          travelData <- bls_api(income_series$X150000.199999[1], startyear = 2018, endyear = 2019, "04b92e5f5d22471f8190da23796fda75") %>%
+          travelData <- bls_api(income_series$X150000.199999[1], startyear = 2018, endyear = 2019, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
             group_by(year) %>%
             summarise_at(vars(value), list(name = mean))
           cpiTravel1 <- travelData$name[1]
@@ -752,7 +767,7 @@ server <- function(input, output, session){
         }
         # income > 200,000
         else {
-          travelData <- bls_api(income_series$X200000[1], startyear = 2018, endyear = 2019, "04b92e5f5d22471f8190da23796fda75") %>%
+          travelData <- bls_api(income_series$X200000[1], startyear = 2018, endyear = 2019, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
             group_by(year) %>%
             summarise_at(vars(value), list(name = mean))
           cpiTravel1 <- travelData$name[1]
@@ -761,7 +776,7 @@ server <- function(input, output, session){
         
         # user didn't input income
       }else {
-        travelData <- bls_api(us_series$travel, startyear = 2018, endyear = 2019, "04b92e5f5d22471f8190da23796fda75") %>%
+        travelData <- bls_api(us_series$travel, startyear = 2018, endyear = 2019, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
           group_by(year) %>%
           summarise_at(vars(value), list(name = mean))
         cpiTravel1 <- travelData$name[1]
@@ -771,14 +786,14 @@ server <- function(input, output, session){
       # advanced cell phone cpi fetcher
       if (input$incomeInput == "") {
         print("cell no income")
-        cellData <- bls_api(us_series$cell, startyear = 2018, endyear = 2019, "04b92e5f5d22471f8190da23796fda75") %>%
+        cellData <- bls_api(us_series$cell, startyear = 2018, endyear = 2019, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
           group_by(year) %>%
           summarise_at(vars(value), list(name = mean))
         cpiCell1 <- cellData$name[1]
         cpiCell2 <- cellData$name[2]
       }
       else if (income < 70000) {
-        cellData <- bls_api(income_series$X15000.29999[2], startyear = 2018, endyear = 2019, "04b92e5f5d22471f8190da23796fda75") %>%
+        cellData <- bls_api(income_series$X15000.29999[2], startyear = 2018, endyear = 2019, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
           group_by(year) %>%
           summarise_at(vars(value), list(name = mean))
         cpiCell1 <- cellData$name[1]
@@ -786,7 +801,7 @@ server <- function(input, output, session){
       } 
       # 69,999 < income < 99,999
       else if (income < 99999 && income > 69999) {
-        cellData <- bls_api(income_series$X70000.99999[2], startyear = 2018, endyear = 2019, "04b92e5f5d22471f8190da23796fda75") %>%
+        cellData <- bls_api(income_series$X70000.99999[2], startyear = 2018, endyear = 2019, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
           group_by(year) %>%
           summarise_at(vars(value), list(name = mean))
         cpiCell1 <- cellData$name[1]
@@ -794,7 +809,7 @@ server <- function(input, output, session){
       }
       # 100,000 < income < 149,999
       else if (income < 149999 && income > 99999) {
-        cellData <- bls_api(income_series$X100000.149999[2], startyear = 2018, endyear = 2019, "04b92e5f5d22471f8190da23796fda75") %>%
+        cellData <- bls_api(income_series$X100000.149999[2], startyear = 2018, endyear = 2019, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
           group_by(year) %>%
           summarise_at(vars(value), list(name = mean))
         cpiCell1 <- cellData$name[1]
@@ -802,7 +817,7 @@ server <- function(input, output, session){
       }
       # 150,000 < income < 199,999
       else if (income < 199999 && income > 149999) {
-        cellData <- bls_api(income_series$X150000.199999[2], startyear = 2018, endyear = 2019, "04b92e5f5d22471f8190da23796fda75") %>%
+        cellData <- bls_api(income_series$X150000.199999[2], startyear = 2018, endyear = 2019, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
           group_by(year) %>%
           summarise_at(vars(value), list(name = mean))
         cpiCell1 <- cellData$name[1]
@@ -810,7 +825,7 @@ server <- function(input, output, session){
       }
       # income > 200,000
       else {
-        cellData <- bls_api(income_series$X200000[2], startyear = 2018, endyear = 2019, "04b92e5f5d22471f8190da23796fda75") %>%
+        cellData <- bls_api(income_series$X200000[2], startyear = 2018, endyear = 2019, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
           group_by(year) %>%
           summarise_at(vars(value), list(name = mean))
         cpiCell1 <- cellData$name[1]
@@ -818,12 +833,12 @@ server <- function(input, output, session){
       }
       
       # advanced food groups cpi fetching
-      if (input$milkCheckbox) {
+      if (!input$milkCheckbox) {
         cpiMilk1 <- 0
         cpiMilk2 <- 0
       }
       else {
-        milkData <- bls_api(us_series$milk, startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+        milkData <- bls_api(us_series$milk, startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
           group_by(year) %>%
           summarise_at(vars(value), list(name = mean))
         cpiMilk1 <- milkData$name[1]
@@ -835,7 +850,7 @@ server <- function(input, output, session){
         cpiSugar2 <- 0
       }
       else {
-        sugarData <- bls_api(us_series$sugar, startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+        sugarData <- bls_api(us_series$sugar, startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
           group_by(year) %>%
           summarise_at(vars(value), list(name = mean))
         cpiSugar1 <- sugarData$name[1]
@@ -847,7 +862,7 @@ server <- function(input, output, session){
         cpiAlc2 <- 0
       }
       else {
-        alcData <- bls_api(us_series$alcohol, startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+        alcData <- bls_api(us_series$alcohol, startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
           group_by(year) %>%
           summarise_at(vars(value), list(name = mean))
         cpiAlc1 <- alcData$name[1]
@@ -859,7 +874,7 @@ server <- function(input, output, session){
         cpiCereal2 <- 0
       }
       else {
-        cerealData <- bls_api(us_series$cereal, startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+        cerealData <- bls_api(us_series$cereal, startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
           group_by(year) %>%
           summarise_at(vars(value), list(name = mean))
         cpiCereal1 <- cerealData$name[1]
@@ -871,7 +886,7 @@ server <- function(input, output, session){
         cpiFat2 <- 0
       }
       else {
-        fatData <- bls_api(us_series$fats, startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+        fatData <- bls_api(us_series$fats, startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
           group_by(year) %>%
           summarise_at(vars(value), list(name = mean))
         cpiFat1 <- fatData$name[1]
@@ -882,14 +897,14 @@ server <- function(input, output, session){
       if (input$eaterType == "Omnivore") {
         # if we have fruit for their metro area
         if (input$metro_area != "None" && metro_series$fruit_veg[index] != "") {
-          fruitData <- bls_api(metro_series$fruit_veg[index], startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+          fruitData <- bls_api(metro_series$fruit_veg[index], startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
             group_by(year) %>%
             summarise_at(vars(value), list(name = mean))
           cpiFruit1 <- fruitData$name[1]
           cpiFruit2 <- fruitData$name[2]
         }
         else {
-          fruitData <- bls_api(us_series$fruit_veg, startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+          fruitData <- bls_api(us_series$fruit_veg, startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
             group_by(year) %>%
             summarise_at(vars(value), list(name = mean))
           cpiFruit1 <- fruitData$name[1]
@@ -897,14 +912,14 @@ server <- function(input, output, session){
         }
         # if we have meat and fish for their metro area
         if (input$metro_area != "None" && metro_series$meat_fish[index] != "") {
-          meatData <- bls_api(metro_series$meat_fish[index], startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+          meatData <- bls_api(metro_series$meat_fish[index], startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
             group_by(year) %>%
             summarise_at(vars(value), list(name = mean))
           cpiMeat1 <- meatData$name[1]
           cpiMeat2 <- meatData$name[2]
         }
         else {
-          meatData <- bls_api(us_series$meat_fish, startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+          meatData <- bls_api(us_series$meat_fish, startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
             group_by(year) %>%
             summarise_at(vars(value), list(name = mean))
           cpiMeat1 <- meatData$name[1]
@@ -916,14 +931,14 @@ server <- function(input, output, session){
       else if (input$eaterType == "Carnivore") {
         # if we have meat and fish for their metro area
         if (input$metro_area != "None" && metro_series$meat_fish[index] != "") {
-          meatData <- bls_api(metro_series$meat_fish[index], startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+          meatData <- bls_api(metro_series$meat_fish[index], startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
             group_by(year) %>%
             summarise_at(vars(value), list(name = mean))
           cpiMeat1 <- meatData$name[1]
           cpiMeat2 <- meatData$name[2]
         }
         else {
-          meatData <- bls_api(us_series$meat_fish, startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+          meatData <- bls_api(us_series$meat_fish, startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
             group_by(year) %>%
             summarise_at(vars(value), list(name = mean))
           cpiMeat1 <- meatData$name[1]
@@ -936,21 +951,21 @@ server <- function(input, output, session){
       # if we have fruit for their metro area
       else if (input$eaterType == "Pollotarian") {
         if (input$metro_area != "None" && metro_series$fruit_veg[index] != "") {
-          fruitData <- bls_api(metro_series$fruit_veg[index], startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+          fruitData <- bls_api(metro_series$fruit_veg[index], startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
             group_by(year) %>%
             summarise_at(vars(value), list(name = mean))
           cpiFruit1 <- fruitData$name[1]
           cpiFruit2 <- fruitData$name[2]
         }
         else {
-          fruitData <- bls_api(us_series$fruit_veg, startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+          fruitData <- bls_api(us_series$fruit_veg, startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
             group_by(year) %>%
             summarise_at(vars(value), list(name = mean))
           cpiFruit1 <- fruitData$name[1]
           cpiFruit2 <- fruitData$name[2]
         }
         # chicken data
-        meatData <- bls_api(us_series$chicken, startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+        meatData <- bls_api(us_series$chicken, startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
           group_by(year) %>%
           summarise_at(vars(value), list(name = mean))
         cpiMeat1 <- meatData$name[1]
@@ -960,21 +975,21 @@ server <- function(input, output, session){
       # pescetarian
       else if (input$eaterType == "Pescetarian") {
         if (input$metro_area != "None" && metro_series$fruit_veg[index] != "") {
-          fruitData <- bls_api(metro_series$fruit_veg[index], startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+          fruitData <- bls_api(metro_series$fruit_veg[index], startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
             group_by(year) %>%
             summarise_at(vars(value), list(name = mean))
           cpiFruit1 <- fruitData$name[1]
           cpiFruit2 <- fruitData$name[2]
         }
         else {
-          fruitData <- bls_api(us_series$fruit_veg, startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+          fruitData <- bls_api(us_series$fruit_veg, startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
             group_by(year) %>%
             summarise_at(vars(value), list(name = mean))
           cpiFruit1 <- fruitData$name[1]
           cpiFruit2 <- fruitData$name[2]
         }
         # fish data
-        meatData <- bls_api(us_series$fish, startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+        meatData <- bls_api(us_series$fish, startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
           group_by(year) %>%
           summarise_at(vars(value), list(name = mean))
         cpiMeat1 <- meatData$name[1]
@@ -984,14 +999,14 @@ server <- function(input, output, session){
       # Vegetarian / Vegan
       else {
         if (input$metro_area != "None" && metro_series$fruit_veg[index] != "") {
-          fruitData <- bls_api(metro_series$fruit_veg[index], startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+          fruitData <- bls_api(metro_series$fruit_veg[index], startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
             group_by(year) %>%
             summarise_at(vars(value), list(name = mean))
           cpiFruit1 <- fruitData$name[1]
           cpiFruit2 <- fruitData$name[2]
         }
         else {
-          fruitData <- bls_api(us_series$fruit_veg, startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+          fruitData <- bls_api(us_series$fruit_veg, startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
             group_by(year) %>%
             summarise_at(vars(value), list(name = mean))
           cpiFruit1 <- fruitData$name[1]
@@ -1003,42 +1018,42 @@ server <- function(input, output, session){
       
     } else {       # non advanced settings
       # rent cpi fetcher
-      rentData <- bls_api("CWUR0000SAS2RS", startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+      rentData <- bls_api("CWUR0000SAS2RS", startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
         group_by(year) %>%
         summarise_at(vars(value), list(name = mean))
       cpiRent1 <- rentData$name[1]
       cpiRent2 <- rentData$name[2]
       
       # transportation cpi fetcher
-      transportData <- bls_api("CUUR0000SAT", startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+      transportData <- bls_api("CUUR0000SAT", startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
         group_by(year) %>%
         summarise_at(vars(value), list(name = mean))
       cpiTransport1 <- transportData$name[1]
       cpiTransport2 <- transportData$name[2]
       
       # medical cpi fetcher
-      medicalData <- bls_api("CUUR0000SAM", startyear = 2020, endyear = 2021,"04b92e5f5d22471f8190da23796fda75") %>%
+      medicalData <- bls_api("CUUR0000SAM", startyear = 2020, endyear = 2021,"a1ce6f946a4d4316a95bbb03bba00b45") %>%
         group_by(year) %>%
         summarise_at(vars(value), list(name = mean))
       cpiMed1 <- medicalData$name[1]
       cpiMed2 <- medicalData$name[2]
       
       # communication cpi fetcher
-      commData <- bls_api("CUUR0000SAE2", startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+      commData <- bls_api("CUUR0000SAE2", startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
         group_by(year) %>%
         summarise_at(vars(value), list(name = mean))
       cpiCom1 <- commData$name[1]
       cpiCom2 <- commData$name[2]
       
       # apparel cpi fetcher
-      apparelData <- bls_api("SUUR0000SAA", startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+      apparelData <- bls_api("SUUR0000SAA", startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
         group_by(year) %>%
         summarise_at(vars(value), list(name = mean))
       cpiApp1 <- apparelData$name[1]
       cpiApp2 <- apparelData$name[2]
       
       # recreational cpi fetcher
-      recData <- bls_api("SUUR0000SAR", startyear = 2020, endyear = 2021, "04b92e5f5d22471f8190da23796fda75") %>%
+      recData <- bls_api("SUUR0000SAR", startyear = 2020, endyear = 2021, "a1ce6f946a4d4316a95bbb03bba00b45") %>%
         group_by(year) %>%
         summarise_at(vars(value), list(name = mean))
       cpiRec1 <- recData$name[1]
@@ -1047,7 +1062,7 @@ server <- function(input, output, session){
       
     }
     
-    output$personalRate <- renderText({
+    output$personalRate <- renderUI({
       # unadjusted total spending
       if (input$advancedSet == 1) {
         unadjTotal <- 0.0
@@ -1133,7 +1148,21 @@ server <- function(input, output, session){
         print(paste(cpiRent1))
         
         inflation_rate <- ((unadjTotal - adjTotal) / adjTotal)
-        print(paste("Personal Inflation Rate: ", percent(inflation_rate, accuracy = 0.01)))
+        # output$usRate <- renderUI (
+        div (
+          h3(paste("Personal Inflation Rate: ", percent(inflation_rate, accuracy = 0.01))),
+          h5(paste("Total Monthly Spendings: ", unadjTotal)),
+          h5(paste("Percentage Change in Housing: ", percent((input$housingInput - adjRent) / adjRent, accuracy = 0.01))),
+          h5(paste("Percentage Change in Transportation: ", percent((input$transInput - adjTravel) / adjTravel, accuracy = 0.01))),
+          h5(paste("Percentage Change in Apparel: ", percent((input$clothInput - adjClothes) / adjClothes, accuracy = 0.01))),
+          h5(paste("Percentage Change in Medical: ", percent((input$medInput - adjMedical) / adjMedical, accuracy = 0.01))),
+          if (cpiEdu1 > 1) {
+            h5(paste("Percentage Change in Education: ", percent((input$eduInput - adjEdu) / adjEdu, accuracy = 0.01)))
+          },
+          h5(paste("Percentage Change in Communications: ", percent((input$comInput - adjCell) / adjCell, accuracy = 0.01)))
+          )
+        #)
+        #print(paste("Personal Inflation Rate: ", percent(inflation_rate, accuracy = 0.01)))
 
       }
       else {
