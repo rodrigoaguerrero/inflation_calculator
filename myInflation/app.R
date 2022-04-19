@@ -21,13 +21,10 @@ egCPI_table_creation <- function(){
       9.50, 12), 
     ncol = 2,
     byrow = TRUE)
-<<<<<<< Updated upstream
   colnames(egCPI) <- c("Price in U.S. Dollars during Base Period (2021)",
                        "Price in U.S. Dollars during Current Period (2022)")
-=======
   colnames(egCPI) <- c("Price in U.S. Dollars in Current Period (2020)",
                        "Price in U.S. Dollars in Base Period (2021)")
->>>>>>> Stashed changes
   rownames(egCPI) <- c("Beef (per pound)",
                        "Eggs (per dozen)", 
                        "Gasoline (per gallon)",
@@ -47,15 +44,15 @@ CPI2_table_creation <- function(){
                   #rounded to the nearest .00
                   ncol = 3, 
                   byrow = TRUE)
-<<<<<<< Updated upstream
+#Updated upstream
   colnames(egCPI) <- c("Price in U.S. Dollars in Base Period (2021)",
                        "Price in U.S. Dollars in Current Period (2022)",
                        "CPI of Item between Base Period (2021) and Current Period (2022)")
-=======
+
   colnames(egCPI) <- c("Price in U.S. Dollars in Current Period (2021)",
                        "Price in U.S. Dollars in Base Period (2020)",
                        "CPI of Item between Current Period (2021) and Base Period (2020)")
->>>>>>> Stashed changes
+#Stashed changes
   rownames(egCPI) <- c("Beef (per pound)",
                        "Eggs (per dozen)", 
                        "Gasoline (per gallon)",
@@ -67,7 +64,17 @@ CPI2_table_creation <- function(){
   help("grid.table")
   returnValue(egCPI)
 }
-
+market_basket_comp<- function(){
+  table1 <- matrix(
+    c(24.66,30.69),
+    ncol = 2,
+    byrow = TRUE)
+  colnames(table1) <- c("Cost of Market Basket in U.S. Dollars during Base Period (2021)",
+                        "Cost of Market Basket in U.S. Dollars during Current Period (2022)")
+  table1 <- as.table(table1)
+  grid.table(table1)
+  returnValue(table1)
+}
 
 ui <- fluidPage(theme = shinytheme("cosmo"),
                 # testing nav bar
@@ -117,7 +124,7 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                conditionalPanel(
                                  condition = "input.tabSelected == 1 && input.advancedSet == 0",
                                  sliderInput("foodInput", "Your Monthly Food Expenses: ",
-                                             min = 0, max = 5000, value = 1200, sep = "")
+                                             min = 0, max = 750, value = 1200, sep = "")
                                ),
                                # Type of eaters
                                conditionalPanel(
@@ -127,48 +134,48 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                ),
                                conditionalPanel(
                                  condition = "input.tabSelected == 1 && input.advancedSet == 1 && input.eaterType == 'Omnivore'",
-                                 sliderInput("meatInput", "Your Monthly Meat Expenses: ",
-                                             min = 0, max = 500, value = 22, sep = "")
+                                 sliderInput("meatInput", "Your Monthly Meat Expenses, in dollars: ",
+                                             min = 0, max = 200, value = 22, sep = "")
                                ),
                                conditionalPanel(
                                  condition = "input.tabSelected == 1 && input.advancedSet == 1 && input.eaterType == 'Omnivore'",
-                                 sliderInput("fruitInput", "Your Monthly Fruit and Vegetable Expenses: ",
-                                             min = 0, max = 500, value = 22, sep = "")
+                                 sliderInput("fruitInput", "Your Monthly Fruit and Vegetable Expenses, in dollars: ",
+                                             min = 0, max = 200, value = 22, sep = "")
                                ),
                                conditionalPanel(
                                  condition = "input.tabSelected == 1 && input.advancedSet == 1 && input.eaterType == 'Carnivore'",
-                                 sliderInput("meatInput", "Your Monthly Meat Expenses: ",
-                                             min = 0, max = 500, value = 22, sep = "")
+                                 sliderInput("meatInput", "Your Monthly Meat Expenses, in dollars: ",
+                                             min = 0, max = 300, value = 22, sep = "")
                                ),
                                conditionalPanel(
                                  condition = "input.tabSelected == 1 && input.advancedSet == 1 && input.eaterType == 'Pollotarian'",
-                                 sliderInput("meatInput", "Your Monthly Poultry Expenses: ",
-                                             min = 0, max = 500, value = 22, sep = "")
+                                 sliderInput("meatInput", "Your Monthly Poultry Expenses, in dollars: ",
+                                             min = 0, max = 300, value = 22, sep = "")
                                ),
                                conditionalPanel(
                                  condition = "input.tabSelected == 1 && input.advancedSet == 1 && input.eaterType == 'Pollotarian'",
-                                 sliderInput("fruitInput", "Your Monthly Fruit and Vegetable Expenses: ",
-                                             min = 0, max = 500, value = 22, sep = "")
+                                 sliderInput("fruitInput", "Your Monthly Fruit and Vegetable Expenses, in dollars: ",
+                                             min = 0, max = 300, value = 22, sep = "")
                                ),
                                conditionalPanel(
                                  condition = "input.tabSelected == 1 && input.advancedSet == 1 && input.eaterType == 'Pescetarian'",
-                                 sliderInput("meatInput", "Your Monthly Fish Expenses: ",
-                                             min = 0, max = 500, value = 22, sep = "")
+                                 sliderInput("meatInput", "Your Monthly Fish Expenses, in dollars: ",
+                                             min = 0, max = 200, value = 22, sep = "")
                                ),
                                conditionalPanel(
                                  condition = "input.tabSelected == 1 && input.advancedSet == 1 && input.eaterType == 'Pescetarian'",
-                                 sliderInput("fruitInput", "Your Monthly Fruit and Vegetable Expenses: ",
-                                             min = 0, max = 500, value = 22, sep = "")
+                                 sliderInput("fruitInput", "Your Monthly Fruit and Vegetable Expenses, in dollars: ",
+                                             min = 0, max = 300, value = 22, sep = "")
                                ),
                                conditionalPanel(
                                  condition = "input.tabSelected == 1 && input.advancedSet == 1 && input.eaterType == 'Vegan'",
-                                 sliderInput("fruitInput", "Your Monthly Fruit and Vegetable Expenses: ",
-                                             min = 0, max = 500, value = 22, sep = "")
+                                 sliderInput("fruitInput", "Your Monthly Fruit and Vegetable Expenses, in dollars: ",
+                                             min = 0, max = 300, value = 22, sep = "")
                                ),
                                conditionalPanel(
                                  condition = "input.tabSelected == 1 && input.advancedSet == 1 && input.eaterType == 'Vegetarian'",
-                                 sliderInput("fruitInput", "Your Monthly Fruit and Vegetable Expenses: ",
-                                             min = 0, max = 500, value = 22, sep = "")
+                                 sliderInput("fruitInput", "Your Monthly Fruit and Vegetable Expenses, in dollars: ",
+                                             min = 0, max = 300, value = 22, sep = "")
                                ),
                                # food groups
                                conditionalPanel(
@@ -197,67 +204,67 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                ),
                                conditionalPanel(
                                  condition = "input.tabSelected == 1 && input.advancedSet == 1 && input.cerealCheckbox == 1",
-                                 sliderInput("cerealInput", "How Much Do You Spend on Cereal Monthly",
-                                             min = 0, max = 300, value = 20, sep="")
+                                 sliderInput("cerealInput", "How much, in dollars, do you Spend on Cereal Monthly?",
+                                             min = 0, max = 100, value = 20, sep="")
                                ),
                                conditionalPanel(
                                  condition = "input.tabSelected == 1 && input.advancedSet == 1 && input.sugarCheckbox == 1",
-                                 sliderInput("sugarInput", "How Much do you Spend on Sugar Monthly",
-                                             min = 0, max = 150, value = 80, sep="")
+                                 sliderInput("sugarInput", "How much, in dollars, do you spend on Sugar Monthly?",
+                                             min = 0, max = 50, value = 80, sep="")
                                ),
                                conditionalPanel(
                                  condition = "input.tabSelected == 1 && input.advancedSet == 1 && input.alcCheckbox == 1",
-                                 sliderInput("alcInput", "How Much do you Spend on Alcohol Monthly",
-                                             min = 0, max = 500, value = 230)
+                                 sliderInput("alcInput", "How much, in dollars, do you spend on Alcohol Monthly?",
+                                             min = 0, max = 200, value = 230)
                                ),
                                conditionalPanel(
                                  condition = "input.tabSelected == 1 && input.advancedSet == 1 && input.milkCheckbox == 1",
-                                 sliderInput("milkInput", "How Much do you Spend on Milk Monthly",
-                                             min = 0, max = 200, value = 110)
+                                 sliderInput("milkInput", "How much, in dollars, do you spend on Milk Monthly?",
+                                             min = 0, max = 50, value = 110)
                                ),
                                conditionalPanel(
                                  condition = "input.tabSelected == 1 && input.advancedSet == 1 && input.fatOilCheckbox == 1",
-                                 sliderInput("fatInput", "How Much do you Spend on Fats and Oils Monthly",
+                                 sliderInput("fatInput", "How much, in dollars do you spend on Fats and Oils Monthly?",
                                              min = 0, max = 300, value = 23)
                                ),
                                # Renting or Mortgage?
                                conditionalPanel(
                                  condition = "input.tabSelected == 1 && input.advancedSet == 1",
-                                 selectInput("rentBuy", "Are you Renting, Buying, or Own?", c("Renting", "Buying w/Mortgage", "Own"))
+                                 selectInput("rentBuy", "Do you rent your home, own with a mortgage or own without a mortgage?", c("Renting", "Own w/ Mortgage", "Own"))
                                ),
                                # Housing Expenses
                                conditionalPanel(
                                  condition = "input.tabSelected == 1",
-                                 sliderInput("housingInput", "Your Monthly Housing Expenses: ",
-                                             min = 0, max = 10000, value = 8200, sep = "")
+                                 sliderInput("housingInput", "Your Monthly Housing Expenses (in dollars): ",
+                                             min = 0, max = 5000, value = 8200, sep = "")
                                ),
                                # Public or Private
                                conditionalPanel(
                                  condition = "input.tabSelected == 1 && input.advancedSet == 1",
-                                 selectInput("transPrivatePublic", "What Type of Transportation?", c("Private", "Public"))
+                                 selectInput("transPrivatePublic", "What type of transportation do you primarily use?", c("Private", "Public"))
                                ),
                                # Transportation
                                conditionalPanel(
                                  condition = "input.tabSelected == 1",
-                                 sliderInput("transInput", "Your Monthly Transportation Expenses: ",
-                                             min = 0, max = 5000, value = 3200, sep = "")
+                                 sliderInput("transInput", "Your Monthly Transportation Expenses, in dollars: ",
+                                             min = 0, max = 1000, value = 3200, sep = "")
                                ),
                                # Medical
                                conditionalPanel(
                                  condition = "input.tabSelected == 1",
-                                 sliderInput("medInput", "Your Monthly Medical Expenses: ",
+                                 sliderInput("medInput", "Your Monthly Medical Expenses, in dollars: ",
                                              min = 0, max = 10000, value = 480, sep = "")
                                ),
                                # Communication/Education
                                conditionalPanel(
                                  condition = "input.tabSelected == 1 && input.advancedSet != 1",
-                                 sliderInput("comInput", "Your Monthly Communication and Education Expenses: ",
-                                             min = 0, max = 10000, value = 2300, sep = "")
+                                 sliderInput("comInput", "Your Monthly Communication and Education Expenses, in dollars: ",
+                                             min = 0, max = 5000, value = 2300, sep = "")
                                ),
                                # advanced phone 
                                conditionalPanel(
                                  condition = "input.tabSelected == 1 && input.advancedSet ==1",
-                                 sliderInput("comInput", "Your Monthly Phone Expenses: ",
+                                 sliderInput("comInput", "Your Monthly Phone Expenses, in dollars: ",
                                              min = 0, max = 500, value = 130, sep = "")
                                ),
                                # advanced education
@@ -270,19 +277,19 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                ),
                                conditionalPanel(
                                  condition = "input.tabSelected == 1 && input.advancedSet == 1",
-                                 sliderInput("eduInput", "Your Monthly Education Expenses:",
+                                 sliderInput("eduInput", "Your Monthly Education Expenses, in dollars:",
                                              min = 0, max = 50000, value = 300, sep = "")
                                ),
                                # Clothing
                                conditionalPanel(
                                  condition = "input.tabSelected == 1",
-                                 sliderInput("clothInput", "Your Monthly Apparel Expense: ",
+                                 sliderInput("clothInput", "Your Monthly Apparel Expenses, in dollars: ",
                                              min = 0, max = 5000, value = 4000, sep = "")
                                ),
                                # Recreation
                                conditionalPanel(
                                  condition = "input.tabSelected == 1",
-                                 sliderInput("recInput", "Your Monthly Recreational Expenses: ",
+                                 sliderInput("recInput", "Your Monthly Recreational Expenses, in dollars: ",
                                              min = 0, max = 3000, value = 250, sep = "")
                                )
                                
@@ -375,41 +382,55 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                   tags$h5("The consumer price index (CPI) is an instrument used to measure the inflation rate. It estimates the variation in price of a good or service between two different periods of time. "),
                                   tags$h5("It is calculated by taking the quotient of the price of a good or service in the current period and dividing it by the price of the same good or service in the base period and multiplying the quotient by one hundred (see Figure 1)."),
                                   tags$i("Figure 1:"),
-                                  tags$h5(img(src = "CPI_Formula.png")),
+                                  tags$h5(img(src = "Figure_1.png")),
                                   tags$b("Market Basket: "),
                                   tags$h5("A Market Basket is a tool utilized to create a CPI for a variety of goods and services which are within a market basket. A bundle of goods and services which serve as a representative sample of what goods and services are purchased by the average consumer of a population is what constitutes a market basket."),
                                   tags$h5("Often, the prices of items in a market basket are recorded over multiple periods of time to determine the CPI at various points in time and ultimately, calculate an inflation rate between any town points in time in which a CPI has been calculated and recorded."),
                                   tags$h1("An Example"),
-                                  tags$h5("To illustrate how a CPI is calculated here is an example:"),
-                                  tags$h5("First, let's begin with our Market Basket. For this example, our market basket is much more limited than the market basket that is used by the Bureau of Labor Statistics. In our basket we have the following five items:"),
-                                  tags$b("1. Beef"),
+                                  tags$h5("To illustrate how a CPI is calculated using a market basketo then find an inflation rate, here is an example:"),
+                                  tags$h5("First, let's begin with our Market Basket. For this example, our market basket is much more limited than the market basket that is used by the Bureau of Labor Statistics. In our theoretical market basket we have the following five items:"),
+                                  tags$i("1. Beef"),
                                   br(),
-                                  tags$b("2. Eggs"),
+                                  tags$i("2. Eggs"),
                                   br(),
-                                  tags$b("3. Gasoline"),
+                                  tags$i("3. Gasoline"),
                                   br(),
-                                  tags$b("4. Bread "),
+                                  tags$i("4. Bread "),
                                   br(),
-                                  tags$b("5. Socks"),
+                                  tags$i("5. Socks"),
                                   br(),
                                   tags$h5("In order to calculate our CPI we need to know certain data points about these five items. Specifically, we need to know the cost of each of these items in the current period and the cost of each of these items in the base period."),
-                                  tags$h5("For our example, our current period will be the year 2020 and the base period will be the year 2020. In the below table, labeled 'Figure 1' we can see how the prices of each of these items has changed between the base period and the current period."),
-                                  tags$i("Figure 1:"),
-                                  tags$h5(img(src = "price_table.png")),
-                                  tags$h5("Now using the above price table, we can calculate the CPI by taking the quotient of the cost of the itemin the current period and the cost in the base period and multiply it by 100. The result of that calculuation can be seen in figure 2 which is identitcal to figure 1 with the exception of the addition of a column denoting the CPI."),
+                                  tags$h5("For our example, our current period will be the year 2022 and the base period will be the year 2021. This follows the most common method where periods are differentiated by years. In the below table, labeled 'Figure 2' we can see how the prices of each of these items has changed between the base period and the current period."),
                                   tags$i("Figure 2:"),
-                                  tags$h5(img(src = "price_table_w_cpi.png")),
+                                  tags$h5(img(src = "Figure_2.png")),
+                                  tags$i("Note: This data is fabricated and used only as an example"),
+                                  tags$h5("Now using the above price table, we can calculate the CPI by taking the quotient of the cost of the item in the current period and the cost in the base period and multiply it by 100. The result of that calculuation can be seen in figure 3 which is identical to figure 2 with the exception of the addition of a column denoting the CPI."),
+                                  tags$i("Figure 3:"),
+                                  tags$h5(img(src = "Figure_3.png")),
+                                  tags$i("Note: This data is fabricated and used only as an example"),
+                                  br(),
+                                  tags$h5("Now, with our CPI in the current period (2022) for each of the item found, we can find the inflation rate by taking the total cost of the market basket in both the base and current periods and find the percentage change between those costs to find the inflation rate. The costs of the market basket in each period are shown in figure 4. "),
+                                  tags$i("Figure 4:"),
+                                  tags$h5(img(src="Figure_4.png")),
+                                  tags$h5("Finally, to calculate the inflation rate, we can simply take the percentage change between the costs of the market basket in the two periods"),
+                                  br(),
+                                  tags$h5("The percentage change formula for Inflation is below:"),
+                                  tags$b("( ( Ending Cost - Starting Cost ) / Starting Cost ) x 100", style="color:blue"),
+                                  br(),
+                                  tags$h5("Applying this formula to our example, we can fill in our prices to get the following:"),
+                                  tags$i("( 30.69 - 24.66 ) / 24.66 ) x 100 "),
+                                  tags$h5("Which gives us the following:"),
+                                  tags$i("(6.03 / 24.66 ) x 100"),
+                                  tags$h5("Which, after finding the quotient leaves us with:"),
+                                  tags$i("0.2445 x 100"),
+                                  tags$h5("Which, when multiplied out gives us an inflation rate of:"),
+                                  tags$b("24.45%"),
+                                  br(),
+                                  br(),
                                   tags$b("CPI-U (Consumer Price Index for All Urban Consumers): "),
                                   tags$h5("The CPI-U is simply a specific type of CPI which is calculated by taking into account the prices that are paid by urban consumers for a market basket of consumer goods and services. The CPI-U is often the most applicable CPI for most inhabitants of the United States as the majority of inhabitants live in areas which are considered by the U.S. Bureau of Labor Statistics to be 'urban'"),
                                   br(),
-                                  # math formulas
-                                  tags$h1("Formulas"),
-                                  tags$b("Consumer Price Index (CPI) Formula: "),
-                                  tags$h5("The Bureau of Labor Statistics does this by creating a market basket which creates a consumer price index. The market basket is created by taking a monthly survey which is distributed to consumers and from that survey data, a sample of goods and services is generated which can then be used to create a market basket which is representative of general populations."),
-                                  tags$h5("CPI = ( Cost of Market Basket in Current Period / Cost of Market Basket in Base Period ) * 100", style="color:red"),
-                                  br(),
                                   tags$b("Inflation Formula"),
-                                  tags$h5("( ( Starting Cost - Ending Cost ) / Starting Cost ) x 100", style="color:red")
                          ),
                          
                          # other pages/ help and about page
