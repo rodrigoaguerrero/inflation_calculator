@@ -1,8 +1,0 @@
-install.packages("devtools") #NEED IN ORDER TO DOWNLOAD SCRAPER
-devtools::install_github("keberwein/blscrapeR") #Downloads scraper from GitHub
-library(blscrapeR) #Load BLS scraper
-
-#Test 1: This test takes the quick_unemp_rate() and assigns it to "df"
-df = quick_unemp_rate()
-print(df)
-
