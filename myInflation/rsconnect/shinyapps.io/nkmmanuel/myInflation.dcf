@@ -5,9 +5,9 @@ account: nkmmanuel
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 6107633
-bundleId: 5815497
+bundleId: 5820586
 url: https://nkmmanuel.shinyapps.io/myInflation/
-when: 1650408577.15042
-lastSyncTime: 1650408577.15042
+when: 1650506554.25531
+lastSyncTime: 1650506554.25531
 asMultiple: FALSE
 asStatic: FALSE
